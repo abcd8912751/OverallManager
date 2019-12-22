@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/projectName_label"
+        android:text="@string/label_entityName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/projectyName_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:inputType="textMultiLine"
+        android:singleLine="false"
+        app:layout_constraintStart_toEndOf="@+id/projectName_label"
+        app:layout_constraintTop_toTopOf="@+id/projectName_label"
+        app:layout_constraintBottom_toBottomOf="@+id/projectName_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/projectAsk_label"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:text="@string/label_entityAsk"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintTop_toBottomOf="@+id/projectName_label"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/projectAsk_content"
+        app:layout_constraintStart_toEndOf="@+id/projectAsk_label"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toTopOf="@+id/projectAsk_label"
+        app:layout_constraintBottom_toBottomOf="@+id/projectAsk_label"
+        android:inputType="textMultiLine"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/project_remark_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintTop_toBottomOf="@+id/projectAsk_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:text="@string/label_entityRemark"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/project_remarkContent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/project_remark_label"
+        app:layout_constraintTop_toTopOf="@+id/project_remark_label"
+        app:layout_constraintBottom_toBottomOf="@+id/project_remark_label"/>
+
+    <TextView
+        android:text="@string/inspect_record"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/inspectRecord_input"
+        app:layout_constraintBottom_toBottomOf="@+id/inspectRecord_input"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+         />
+    <EditText
+        android:id="@+id/inspectRecord_input"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:hint="@string/hint_record"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:background="@mipmap/edittext_white_normal"
+        app:layout_constraintStart_toStartOf="@+id/projectAsk_content"
+        app:layout_constraintTop_toBottomOf="@+id/project_remarkContent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

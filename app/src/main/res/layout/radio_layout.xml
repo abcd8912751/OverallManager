@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/tablayout_background"
+        >
+        <RadioButton
+            android:id="@+id/radio_spotCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:button="@null"
+            android:gravity="center"
+            android:drawableTop="@mipmap/ic_spot_check"
+            android:text="@string/label_spotCheck" />
+
+        <RadioButton
+            android:id="@+id/radio_maintain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:button="@null"
+            android:gravity="center"
+            android:drawableTop="@mipmap/ic_maintain"
+            android:text="@string/label_maintain" />
+
+        <RadioButton
+            android:id="@+id/radio_repair"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:button="@null"
+            android:gravity="center"
+            android:drawableTop="@mipmap/ic_repair"
+            android:text="@string/label_repair" />
+        <RadioButton
+            android:id="@+id/radio_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:button="@null"
+            android:gravity="center"
+            android:drawableTop="@mipmap/ic_radio_plan"
+            android:text="@string/label_plan" />
+    </RadioGroup>
+</LinearLayout>

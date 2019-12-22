@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:showIn="@layout/frag_apply_repair">
+
+    <TextView
+        android:id="@+id/label_repairContent"
+        android:text="@string/repairContent"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/Black"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/edit_repairContent"
+        android:hint="@string/hint_repairContent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="@dimen/input_solid_width"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/edit_stopDuration"
+        app:layout_constraintTop_toTopOf="@+id/label_repairContent"
+        app:layout_constraintBottom_toBottomOf="@+id/label_repairContent"
+        android:singleLine="true"
+        android:background="@mipmap/edittext_white_normal" />
+
+    <TextView
+        android:id="@+id/label_repairRequire"
+        android:text="@string/repairRequire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:textColor="@color/Black"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintTop_toBottomOf="@+id/label_repairContent" />
+
+    <EditText
+        android:id="@+id/edit_repairRequire"
+        android:hint="@string/hint_repairRequire"
+        android:layout_width="@dimen/input_solid_width"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/edit_stopDuration"
+        app:layout_constraintTop_toTopOf="@+id/label_repairRequire"
+        app:layout_constraintBottom_toBottomOf="@+id/label_repairRequire"
+        android:singleLine="true"
+        android:background="@mipmap/edittext_white_normal" />
+
+    <TextView
+        android:id="@+id/label_stopDuration"
+        android:text="@string/stop_Duration_plan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:textColor="@color/Black"
+        android:layout_marginTop="@dimen/repair_vertical_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_repairRequire" />
+
+    <EditText
+        android:id="@+id/edit_stopDuration"
+        android:layout_width="@dimen/input_solid_width"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:hint="@string/default_duration"
+        android:inputType="numberDecimal"
+        android:drawableRight="@mipmap/hour_right"
+        android:background="@drawable/shape_hour_input"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/label_stopDuration"
+        app:layout_constraintBottom_toBottomOf="@+id/label_stopDuration"
+        app:layout_constraintTop_toTopOf="@+id/label_stopDuration" />
+
+    <TextView
+        android:id="@+id/label_repairDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:textColor="@color/Black"
+        android:text="@string/repair_Duration_plan"
+        android:layout_marginTop="@dimen/repair_vertical_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintTop_toBottomOf="@+id/label_stopDuration"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_repairDuration"
+        android:layout_width="@dimen/input_solid_width"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:inputType="numberDecimal"
+        android:hint="@string/default_duration"
+        android:drawableRight="@mipmap/hour_right"
+        android:background="@drawable/shape_hour_input"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/label_repairDuration"
+        app:layout_constraintTop_toTopOf="@+id/label_repairDuration"
+        app:layout_constraintBottom_toBottomOf="@+id/label_repairDuration" />
+
+    <TextView
+        android:id="@+id/label_planRepairFee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:textColor="@color/Black"
+        android:text="@string/planRepairFee_label"
+        android:layout_marginTop="@dimen/repair_vertical_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintTop_toBottomOf="@+id/label_repairDuration"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_planRepairFee"
+        android:layout_width="@dimen/input_solid_width"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:inputType="numberDecimal"
+        android:hint="@string/default_duration"
+        android:drawableRight="@mipmap/currency_right"
+        android:background="@drawable/shape_hour_input"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/label_planRepairFee"
+        app:layout_constraintTop_toTopOf="@+id/label_planRepairFee"
+        app:layout_constraintBottom_toBottomOf="@+id/label_planRepairFee" />
+
+    <LinearLayout
+        android:id="@+id/begin_layout"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toBottomOf="@+id/label_planRepairFee">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/Black"
+            android:text="@string/planBegin_Label"
+            app:layout_constraintTop_toTopOf="@+id/detail_content"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_content"
+            android:paddingTop="@dimen/textExtra_margin"
+            android:paddingBottom="@dimen/textExtra_margin"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/begin_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/textExtra_margin"
+            android:paddingBottom="@dimen/textExtra_margin"
+            android:textColor="@color/Black"
+            android:inputType="textMultiLine"
+            android:singleLine="false"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/end_layout"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toBottomOf="@+id/begin_layout">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/Black"
+            android:text="@string/planEnd_Label"
+            app:layout_constraintTop_toTopOf="@+id/detail_content"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_content"
+            android:paddingTop="@dimen/textExtra_margin"
+            android:paddingBottom="@dimen/textExtra_margin"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/end_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/textExtra_margin"
+            android:paddingBottom="@dimen/textExtra_margin"
+            android:textColor="@color/Black"
+            android:inputType="textMultiLine"
+            android:singleLine="false"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/label_repairNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_Remark"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:textColor="@color/Black"
+        android:layout_marginTop="@dimen/repair_vertical_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintTop_toBottomOf="@+id/end_layout"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_repairNote"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@mipmap/edittext_white_normal"
+        android:hint="@string/hint_remark"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/label_repairNote"
+        app:layout_constraintStart_toStartOf="@+id/edit_stopDuration"
+        app:layout_constraintTop_toTopOf="@+id/label_repairNote" />
+
+    <TextView
+        android:id="@+id/repair_item"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/image_margin"
+        android:background="@drawable/shape_item_bg"
+        android:drawableRight="@mipmap/ic_more_right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/item_repair"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/Black"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toBottomOf="@+id/label_repairNote" />
+</merge>

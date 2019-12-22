@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_toast_bg">
+    <TextView
+        android:id="@+id/toast_msg"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:drawablePadding="@dimen/dp_4"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:drawableStart="@mipmap/ic_toast_left"
+        android:maxLines="6"
+        />
+</LinearLayout>

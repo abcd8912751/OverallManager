@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/text_applyRepair"
+        android:text="@string/label_applyRepair"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/ic_apply_left"
+        android:drawablePadding="@dimen/image_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        style="@style/OwnTextViewStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/text_repairOrder"
+        android:text="@string/label_repairOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/ic_items_left"
+        android:drawablePadding="@dimen/image_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        style="@style/OwnTextViewStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_applyRepair"
+        />
+
+    <TextView
+        android:id="@+id/text_repairCheck"
+        android:text="@string/repair_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/ic_repair_check"
+        android:drawablePadding="@dimen/image_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        style="@style/OwnTextViewStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_repairOrder"
+        />
+    <TextView
+        android:id="@+id/text_ownRepairReport"
+        android:text="@string/own_spotCheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/ic_check_left"
+        style="@style/OwnTextViewStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_repairCheck"
+        />
+
+    <TextView
+        android:id="@+id/text_ownRepairRecord"
+        android:text="@string/own_repairLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/ic_repair_left"
+        style="@style/OwnTextViewStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_ownRepairReport"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

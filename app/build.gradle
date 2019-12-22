@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        applicationId "com.furja.overallmanager"
+        minSdkVersion 18
+        targetSdkVersion 28
+        versionCode 5
+        versionName "5.0516"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs "zh-rCN"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        disable 'PrivateResource'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':hellocharts-library')
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
+    implementation 'androidx.navigation:navigation-fragment:2.0.0'
+    implementation 'androidx.navigation:navigation-ui:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.preference:preference:1.1.0-alpha05'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+    implementation 'com.alibaba:fastjson:1.2.62'
+    implementation 'com.alibaba:fastjson:1.1.71.android'
+    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'com.kyleduo.switchbutton:library:2.0.0'
+    implementation 'org.apmem.tools:layouts:1.10@aar'
+    implementation 'com.zhy:okhttputils:2.6.2'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'q.rorbin:badgeview:1.1.3'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
+    implementation 'com.github.BaronZ88:Retrofit2-FastJson-Converter:1.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.15'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.uber.autodispose:autodispose-android-archcomponents:0.8.0'
+    implementation group: 'com.github.chrisbanes', name: 'PhotoView', version: 'v2.0.0'
+    implementation group: 'com.github.bumptech.glide', name: 'glide', version: '4.9.0'
+    implementation group: 'com.github.bumptech.glide', name: 'okhttp3-integration', version: '4.9.0'
+    implementation group: 'com.bytedance.ttgame', name: 'agentweb', version: '4.1.22.1'
+    implementation 'io.sentry:sentry-android:1.7.29'
+}

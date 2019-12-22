@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.furja.devicemanager.view.ClearableEditTextWithIcon
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_barCode"
+        android:hint="@string/hint_barCode"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_deviceInfo"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/device_info"
+        android:singleLine="false"
+        android:lines="2"
+        android:background="@drawable/shape_device_info"
+        app:layout_constraintTop_toBottomOf="@+id/edit_barCode"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

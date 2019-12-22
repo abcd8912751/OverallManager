@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="workinfo_titles">
+        <item>物料代码</item>
+        <item>物料名称</item>
+        <item>规格</item>
+        <item>日期</item>
+        <item>员工号</item>
+        <item>机台号</item>
+        <item>不良品数量</item>
+    </string-array>
+
+    <string-array name="operate_options">
+        <item>缺料</item>
+        <item>多胶</item>
+        <item>缩水</item>
+        <item>冷料</item>
+        <item>气泡</item>
+        <item>气纹</item>
+        <item>料花</item>
+        <item>烧焦</item>
+        <item>白芯</item>
+        <item>顶高</item>
+        <item>拖伤</item>
+        <item>模印</item>
+        <item>杂料</item>
+        <item>混色</item>
+        <item>油污</item>
+        <item>脏污</item>
+        <item>变形</item>
+        <item>穿孔</item>
+        <item>堵孔</item>
+        <item>开痕</item>
+        <item>结合线</item>
+        <item>流痕</item>
+        <item>碰伤</item>
+        <item>划伤</item>
+        <item>修伤</item>
+        <item>水口休整</item>
+        <item>披锋</item>
+        <item>包胶脱胶</item>
+        <item>压伤</item>
+        <item>热光影</item>
+        <item>包装不符</item>
+        <item>尺寸不良</item>
+        <item>其他</item>
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>检查更新</item>
+        <item>切换账户</item>
+        <item>关于软件</item>
+    </string-array>
+</resources>

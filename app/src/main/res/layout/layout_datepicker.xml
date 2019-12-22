@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:text="@string/start_date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorBasic"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/datePickerStart"
+        app:layout_constraintEnd_toEndOf="@+id/datePickerStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="@string/end_date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorBasic"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/datePickerEnd"
+        app:layout_constraintEnd_toEndOf="@+id/datePickerEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <DatePicker
+        android:id="@+id/datePickerStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnersShown="true"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/transfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_transfer"
+        app:layout_constraintStart_toEndOf="@+id/datePickerStart"
+        app:layout_constraintTop_toTopOf="@+id/datePickerStart"
+        app:layout_constraintBottom_toBottomOf="@+id/datePickerStart"
+        />
+    <DatePicker
+        android:id="@+id/datePickerEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/transfer"
+        android:spinnersShown="true"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        />
+    <Button
+        style="@style/Base.Widget.AppCompat.Button.ButtonBar.AlertDialog"
+        android:id="@+id/cycle_set"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_tips"
+        android:textColor="@color/colorBasic"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+        app:layout_constraintTop_toBottomOf="@+id/datePickerEnd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

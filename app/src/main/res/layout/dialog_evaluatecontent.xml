@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/repair_over"
+            android:text="@string/repair_switchOn"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:text="@string/repair_switchOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/evaluate_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:inputType="textMultiLine"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:hint="@string/hint_evaluate"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

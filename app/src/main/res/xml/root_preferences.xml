@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="prefAndroid"
+        android:title="检查更新"
+        android:summary="切换账户"/>
+    <Preference
+        android:key="prefIos"
+        android:title="IOS"
+        android:summary="可以作为一个设置项"/>
+    <Preference
+        android:key="prefIos"
+        android:title="IOS"
+        android:summary="可以作为一个设置项"/>
+</PreferenceScreen>
