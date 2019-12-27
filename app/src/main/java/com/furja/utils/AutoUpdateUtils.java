@@ -18,7 +18,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.baronzhang.retrofit2.converter.FastJsonConverterFactory;
-import com.furja.devicemanager.DeviceManagerApp;
 import com.furja.overall.R;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -40,7 +39,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.http.GET;
 
-import static com.furja.devicemanager.utils.Constants.LOG_TAG;
+import static com.furja.utils.Constants.LOG_TAG;
 import static com.furja.utils.Utils.showLog;
 import static com.furja.utils.Utils.showToast;
 

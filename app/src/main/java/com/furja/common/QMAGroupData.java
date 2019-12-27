@@ -1,84 +1,54 @@
-package com.furja.overall.databases;
-
-import com.furja.utils.Constants;
+package com.furja.common;
 
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Keep;
-import org.greenrobot.greendao.annotation.NotNull;
-import com.furja.devicemanager.databases.DaoSession;
-
+import com.furja.common.DaoSession;
+import com.furja.common.QMAGroupDataDao;
 
 /**
- * GreenDao异常基础类型配置实例
+ * 从网络获取不良项目后保存到本地
  */
 @Entity(active = true)
-public class BadTypeConfig {
+public class QMAGroupData {
     @Id(autoincrement = true)
     private Long id;
-
-    @NotNull
-    private long sourcType;  // 1表示btn录入的数据,2表示key录入的数据,区分不同场景
-    @NotNull
-    private String badTypeCode; //具体上传使用的ID或异常代码如F0010
-    private String typeDesp; //每个ID对应的异常类型,如ID为1时对应的是料花
-
+    private String FNumber;
+    private String FName;
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-
     /** Used for active entity operations. */
-    @Generated(hash = 1290593246)
-    private transient BadTypeConfigDao myDao;
-
-
-
-    @Generated(hash = 1023180599)
-    public BadTypeConfig(Long id, long sourcType, @NotNull String badTypeCode,
-            String typeDesp) {
+    @Generated(hash = 1171737613)
+    private transient QMAGroupDataDao myDao;
+    @Generated(hash = 602245871)
+    public QMAGroupData(Long id, String FNumber, String FName) {
         this.id = id;
-        this.sourcType = sourcType;
-        this.badTypeCode = badTypeCode;
-        this.typeDesp = typeDesp;
+        this.FNumber = FNumber;
+        this.FName = FName;
     }
-    @Generated(hash = 1419734551)
-    public BadTypeConfig() {
+    @Generated(hash = 538397431)
+    public QMAGroupData() {
     }
-
-
-
-
-
     public Long getId() {
         return this.id;
     }
     public void setId(Long id) {
         this.id = id;
     }
-    public long getSourcType() {
-        return this.sourcType;
+    public String getFNumber() {
+        return this.FNumber;
     }
-    public void setSourcType(long sourcType) {
-        this.sourcType = sourcType;
+    public void setFNumber(String FNumber) {
+        this.FNumber = FNumber;
     }
-    public String getBadTypeCode() {
-        return this.badTypeCode;
+    public String getFName() {
+        return this.FName;
     }
-    public void setBadTypeCode(String badTypeCode) {
-        this.badTypeCode = badTypeCode;
+    public void setFName(String FName) {
+        this.FName = FName;
     }
-    public String getTypeDesp() {
-        return this.typeDesp;
-    }
-    public void setTypeDesp(String typeDesp) {
-        this.typeDesp = typeDesp;
-    }
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-     * Entity must attached to an entity context.
-     */
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
      * Entity must attached to an entity context.
@@ -112,15 +82,14 @@ public class BadTypeConfig {
         }
         myDao.update(this);
     }
-    @Keep
-    public String toString()
-    {
-        return badTypeCode+ Constants.INTER_SPLIT +typeDesp;
+    @Override
+    public String toString() {
+        return FNumber;
     }
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 120303353)
+    @Generated(hash = 1015966543)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getBadTypeConfigDao() : null;
+        myDao = daoSession != null ? daoSession.getQMAGroupDataDao() : null;
     }
 }

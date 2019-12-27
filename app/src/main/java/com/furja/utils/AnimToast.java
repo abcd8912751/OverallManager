@@ -25,11 +25,11 @@ public class AnimToast {
     WindowManager windowManager;
     boolean isShowing;
     WindowManager.LayoutParams layoutParams;
+    long delay=1;
     public static AnimToast makeText(Context context, String text) {
         AnimToast result = new AnimToast(context, text);
         return result;
     }
-
 
     private AnimToast(Context context, String text){
         isShowing=false;
@@ -65,7 +65,7 @@ public class AnimToast {
             isShowing = true;
             windowManager.addView(toastView, layoutParams);//将其加载到windowManager上
             Observable.just(windowManager)
-                    .delay(1,TimeUnit.SECONDS)
+                    .delay(delay,TimeUnit.SECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(aLong -> {
                         if(ViewCompat.isAttachedToWindow(toastView))
@@ -78,7 +78,12 @@ public class AnimToast {
     }
 
 
+    public long getDelay() {
+        return delay;
+    }
 
-
-
+    public AnimToast setDelay(long delay) {
+        this.delay = delay;
+        return this;
+    }
 }

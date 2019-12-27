@@ -13,8 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.furja.overall.R;
-import com.furja.iqc.beans.QMAGroupData;
-import com.furja.iqc.utils.LocalQuery;
+import com.furja.common.QMAGroupData;
+import com.furja.utils.LocalQuery;
 
 import java.util.ArrayList;
 import java.util.List;

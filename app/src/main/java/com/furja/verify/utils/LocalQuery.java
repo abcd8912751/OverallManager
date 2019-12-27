@@ -1,9 +1,9 @@
 package com.furja.verify.utils;
 
-import com.furja.devicemanager.databases.DaoSession;
+import com.furja.common.DaoSession;
 import com.furja.overall.FurjaApp;
-import com.furja.verify.model.ProductNumber;
-import com.furja.verify.model.ProductNumberDao;
+import com.furja.common.ProductNumber;
+import com.furja.common.ProductNumberDao;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 

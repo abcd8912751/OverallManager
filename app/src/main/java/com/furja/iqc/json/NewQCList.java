@@ -1,13 +1,17 @@
 package com.furja.iqc.json;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 请检单列表
  */
-public class NewQCList {
+public class NewQCList implements Parcelable {
     private List<QCDataBean> QCData;
     private List<QCEntryDataBean> QCEntryData;
     @JSONField(serialize = false)
@@ -15,6 +19,8 @@ public class NewQCList {
     @JSONField(serialize = false)
     private double applyQcNum;
     private List<QCValueBean> QCValueData;
+
+
     public List<QCDataBean> getQCData() {
         return QCData;
     }
@@ -48,7 +54,7 @@ public class NewQCList {
     }
 
 
-    public static class QCValueBean{
+    public static class QCValueBean implements Parcelable {
         private int FItemSeq;
         private String FInspectValue1;
         private String FInspectValue2;
@@ -120,8 +126,51 @@ public class NewQCList {
         public void setFInspectValue6(String FInspectValue6) {
             this.FInspectValue6 = FInspectValue6;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.FItemSeq);
+            dest.writeString(this.FInspectValue1);
+            dest.writeString(this.FInspectValue2);
+            dest.writeString(this.FInspectValue3);
+            dest.writeString(this.FInspectValue4);
+            dest.writeString(this.FInspectValue5);
+            dest.writeString(this.FInspectValue6);
+            dest.writeString(this.FAnaysisMethod);
+        }
+
+        public QCValueBean() {
+        }
+
+        protected QCValueBean(Parcel in) {
+            this.FItemSeq = in.readInt();
+            this.FInspectValue1 = in.readString();
+            this.FInspectValue2 = in.readString();
+            this.FInspectValue3 = in.readString();
+            this.FInspectValue4 = in.readString();
+            this.FInspectValue5 = in.readString();
+            this.FInspectValue6 = in.readString();
+            this.FAnaysisMethod = in.readString();
+        }
+
+        public static final Creator<QCValueBean> CREATOR = new Creator<QCValueBean>() {
+            @Override
+            public QCValueBean createFromParcel(Parcel source) {
+                return new QCValueBean(source);
+            }
+
+            @Override
+            public QCValueBean[] newArray(int size) {
+                return new QCValueBean[size];
+            }
+        };
     }
-    public static class QCDataBean {
+    public static class QCDataBean implements Parcelable {
         /**
          * 收货日期 : 2018-5-8 0:00:00
          * 检验方案 : QCS003277
@@ -318,9 +367,76 @@ public class NewQCList {
                             "       供应商:        " + supplyName +lineSeparator +
                             "     物料名称:      " + materialName ;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.supplyDate);
+            dest.writeString(this.qcScheme);
+            dest.writeString(this.supplyName);
+            dest.writeString(this.materialName);
+            dest.writeString(this.applyQcNum);
+            dest.writeInt(this.applyOrderID);
+            dest.writeString(this.applyOrderBillNo);
+            dest.writeInt(this.applyOrderEntryID);
+            dest.writeInt(this.applyOrder_Row);
+            dest.writeString(this.errorMsg);
+            dest.writeString(this.materialNumber);
+            dest.writeInt(this.materialID);
+            dest.writeString(this.barcode);
+            dest.writeString(this.FOrderType);
+            dest.writeString(this.FOrderBillNo);
+            dest.writeInt(this.FOrderId);
+            dest.writeInt(this.FOrderEntryId);
+            dest.writeInt(this.FOrderEntrySeq);
+            dest.writeString(this.FUnitNumber);
+            dest.writeString(this.FSourceOrgNumber);
+        }
+
+        public QCDataBean() {
+        }
+
+        protected QCDataBean(Parcel in) {
+            this.supplyDate = in.readString();
+            this.qcScheme = in.readString();
+            this.supplyName = in.readString();
+            this.materialName = in.readString();
+            this.applyQcNum = in.readString();
+            this.applyOrderID = in.readInt();
+            this.applyOrderBillNo = in.readString();
+            this.applyOrderEntryID = in.readInt();
+            this.applyOrder_Row = in.readInt();
+            this.errorMsg = in.readString();
+            this.materialNumber = in.readString();
+            this.materialID = in.readInt();
+            this.barcode = in.readString();
+            this.FOrderType = in.readString();
+            this.FOrderBillNo = in.readString();
+            this.FOrderId = in.readInt();
+            this.FOrderEntryId = in.readInt();
+            this.FOrderEntrySeq = in.readInt();
+            this.FUnitNumber = in.readString();
+            this.FSourceOrgNumber = in.readString();
+        }
+
+        public static final Creator<QCDataBean> CREATOR = new Creator<QCDataBean>() {
+            @Override
+            public QCDataBean createFromParcel(Parcel source) {
+                return new QCDataBean(source);
+            }
+
+            @Override
+            public QCDataBean[] newArray(int size) {
+                return new QCDataBean[size];
+            }
+        };
     }
 
-    public static class QCEntryDataBean {
+    public static class QCEntryDataBean implements Parcelable {
         /**
          * 检验项目 : 物料名称
          * 目标值 : 0.000
@@ -509,6 +625,69 @@ public class NewQCList {
                     "分析方法: " + analysisWay + "  " +
                     "缺陷等级: " + faultClass;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.qcProject);
+            dest.writeString(this.targetValue);
+            dest.writeString(this.lowerSpec);
+            dest.writeString(this.upperSpec);
+            dest.writeString(this.analysisWay);
+            dest.writeString(this.faultClass);
+            dest.writeString(this.sampleQty);
+            dest.writeString(this.acceptQty);
+            dest.writeString(this.rejectQty);
+            dest.writeDouble(this.FUpOffsetQ);
+            dest.writeDouble(this.FDownOffsetQ);
+            dest.writeString(this.FSampleSchemeId1);
+            dest.writeString(this.FInspectItemId);
+            dest.writeString(this.FInspectMethodId);
+            dest.writeString(this.FTargetValB);
+            dest.writeString(this.FInspectBasisId);
+            dest.writeString(this.FInspectInstrumentId);
+            dest.writeByte(this.FKeyInspect ? (byte) 1 : (byte) 0);
+        }
+
+        public QCEntryDataBean() {
+        }
+
+        protected QCEntryDataBean(Parcel in) {
+            this.qcProject = in.readString();
+            this.targetValue = in.readString();
+            this.lowerSpec = in.readString();
+            this.upperSpec = in.readString();
+            this.analysisWay = in.readString();
+            this.faultClass = in.readString();
+            this.sampleQty = in.readString();
+            this.acceptQty = in.readString();
+            this.rejectQty = in.readString();
+            this.FUpOffsetQ = in.readDouble();
+            this.FDownOffsetQ = in.readDouble();
+            this.FSampleSchemeId1 = in.readString();
+            this.FInspectItemId = in.readString();
+            this.FInspectMethodId = in.readString();
+            this.FTargetValB = in.readString();
+            this.FInspectBasisId = in.readString();
+            this.FInspectInstrumentId = in.readString();
+            this.FKeyInspect = in.readByte() != 0;
+        }
+
+        public static final Creator<QCEntryDataBean> CREATOR = new Creator<QCEntryDataBean>() {
+            @Override
+            public QCEntryDataBean createFromParcel(Parcel source) {
+                return new QCEntryDataBean(source);
+            }
+
+            @Override
+            public QCEntryDataBean[] newArray(int size) {
+                return new QCEntryDataBean[size];
+            }
+        };
     }
 
     public boolean isHasCatchList() {
@@ -518,4 +697,40 @@ public class NewQCList {
     public void setHasCatchList(boolean hasCatchList) {
         this.hasCatchList = hasCatchList;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeList(this.QCData);
+        dest.writeList(this.QCEntryData);
+        dest.writeList(this.QCValueData);
+    }
+
+    public NewQCList() {
+    }
+
+    protected NewQCList(Parcel in) {
+        this.QCData = new ArrayList<QCDataBean>();
+        in.readList(this.QCData, QCDataBean.class.getClassLoader());
+        this.QCEntryData = new ArrayList<QCEntryDataBean>();
+        in.readList(this.QCEntryData, QCEntryDataBean.class.getClassLoader());
+        this.QCValueData = new ArrayList<QCValueBean>();
+        in.readList(this.QCValueData, QCValueBean.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<NewQCList> CREATOR = new Parcelable.Creator<NewQCList>() {
+        @Override
+        public NewQCList createFromParcel(Parcel source) {
+            return new NewQCList(source);
+        }
+
+        @Override
+        public NewQCList[] newArray(int size) {
+            return new NewQCList[size];
+        }
+    };
 }

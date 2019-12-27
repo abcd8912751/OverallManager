@@ -15,13 +15,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.furja.devicemanager.databases.DaoSession;
+import com.furja.common.DaoSession;
 import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
 import com.furja.verify.json.ProductNoListJson;
 import com.furja.verify.json.ReleaseResultJson;
-import com.furja.verify.model.ProductNumber;
-import com.furja.verify.model.ProductNumberDao;
+import com.furja.common.ProductNumber;
+import com.furja.common.ProductNumberDao;
 import com.furja.verify.utils.InneURL;
 import com.furja.verify.view.MyAutoAdapter;
 import com.zhy.http.okhttp.OkHttpUtils;

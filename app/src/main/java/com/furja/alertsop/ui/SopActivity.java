@@ -103,7 +103,7 @@ public class SopActivity extends BaseActivity implements InjectionLogContract.Vi
     }
 
     private void listenSharpBus() {
-        SharpBus.getInstance().register(TAG_SCAN_BARCODE, String.class)
+        SharpBus.getInstance().register(TAG_SCAN_BARCODE,this, String.class)
                 .as(AutoDispose.<String>autoDisposable(AndroidLifecycleScopeProvider.from(this)))
                 .subscribe(scanString -> {
                     if (scanString.equals(INPUT_ERROR)

@@ -30,9 +30,10 @@ public class Constants {
     public static final String TAG_ERROR_NET ="网络等异常";
     public static final String TAG_ERROR_BARCODE="携带异常条形码信息";
     public static final String TAG_SCAN_BARCODE="条码扫描信息";
-    public static final String EXTRA_QCENTRY_DATA ="质检方案检验项目信息";
-    public static final String EXTRA_QCDATA_BEAN ="质检方案信息";
+    public static final String EXTRA_QCENTRY_DATA ="检验项目信息";
+    public static final String EXTRA_QCDATA_BEAN ="请检单信息";
     public static final String EXTRA_QCVALUE_DATA ="检验项目检测值信息";
+    public static final String EXTRA_QCLIST_DATA ="质检方案清单";
     public static final String EXTRA_BARCODE="二维码信息";
     public static final String EXTRA_APPLYQC_NUM="请检数量信息";
     public static final String TAG_SWITCH_POSITION="切换RecyclerView子项";
@@ -154,8 +155,6 @@ public class Constants {
 //            url= HTTPS_OUTER_URL;
         return url;
     }
-
-
 
     @NonNull
     public static String getVertxUrl() {

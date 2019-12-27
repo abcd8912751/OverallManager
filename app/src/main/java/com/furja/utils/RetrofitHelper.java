@@ -9,7 +9,6 @@ import com.furja.iqc.beans.CheckCBList;
 import com.furja.iqc.json.NewQCList;
 import com.furja.iqc.json.QMAGroupBean;
 import com.furja.overall.beans.InspectHistoryLog;
-import com.furja.overall.json.LoginJson;
 
 import java.util.List;
 
@@ -42,8 +41,6 @@ public interface RetrofitHelper {
     @POST("base/errorlog")
     Observable<ResponseBody> postErrorLog(@Body RequestBody requestBody);
 
-    @GET("GetLoginList")
-    Observable<LoginJson> getLoginCall(@Query("user") String user, @Query("password") String password);
 
     @GET("FJCommonInterface/GetBarCodeInfo/")
     Call<com.furja.iqc.json.MaterialJson> getParts(@Query("BarCode") String barCode);
@@ -56,12 +53,11 @@ public interface RetrofitHelper {
     Call<CheckCBList> isCheckCBList(@Query("codebar") String barCode, @Query("comparecodebar") String comparecodebar, @Query("cb") String cb);
 
 
-
     @GET("k3cloud/checkcblist")
     Observable<CheckCBList> checkCBList(@Query("barcode") String barCode, @Query("comparecodebar") String comparecodebar, @Query("cb") String cb);
 
     @GET("k3cloud/qclist")
-    Observable<BaseHttpResponse<NewQCList>> getQcList(@Query("barcode") String barCode);
+    Observable<BaseHttpResponse<NewQCList>> getQcList(@Query("barcode") String barCode,@Query("username") String username);
 
     @Headers({"Content-Type: application/json"})
     @POST("k3cloud/inspectbill")

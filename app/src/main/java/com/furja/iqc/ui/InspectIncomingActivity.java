@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
 
 import static com.furja.utils.Constants.EXTRA_QCDATA_BEAN;
 import static com.furja.utils.Constants.EXTRA_QCENTRY_DATA;
+import static com.furja.utils.Constants.EXTRA_QCLIST_DATA;
 import static com.furja.utils.Constants.EXTRA_QCVALUE_DATA;
 import static com.furja.utils.Utils.showLog;
 
@@ -89,9 +90,8 @@ public class InspectIncomingActivity extends BaseActivity implements IncomingVer
      * 针对检验项目赋值
      */
     private void toLogProject() {
-        List<NewQCList.QCEntryDataBean> dataBeanList
-                =presenter.getQcEntryDataBeans();
-        if(dataBeanList==null||dataBeanList.isEmpty()) {
+        NewQCList qcList =presenter.getQcList();
+        if(qcList==null) {
             showLog("暂未获得质检方案不予执行");
             return;
         }
@@ -99,12 +99,8 @@ public class InspectIncomingActivity extends BaseActivity implements IncomingVer
             showLog("无有效的条形码");
             return;
         }
-        List<NewQCList.QCDataBean> qcDataBeans=presenter.getQcDataBeans();
-        List<NewQCList.QCValueBean> valueBeans=presenter.getQcValueData();
         Intent intent=new Intent(InspectIncomingActivity.this, InspectItemDetailActivity.class);
-        intent.putExtra(EXTRA_QCENTRY_DATA, JSON.toJSONString(dataBeanList));
-        intent.putExtra(EXTRA_QCDATA_BEAN, JSON.toJSONString(qcDataBeans));
-        intent.putExtra(EXTRA_QCVALUE_DATA, JSON.toJSONString(valueBeans));
+        intent.putExtra(EXTRA_QCLIST_DATA,qcList);
         startActivity(intent);
         finish();
     }

@@ -31,6 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.furja.utils.Utils.doubleOf;
+import static com.furja.utils.Utils.intOf;
 import static com.furja.utils.Utils.showLog;
 import static com.furja.utils.Utils.showToast;
 import static com.furja.utils.Utils.textOf;
@@ -136,10 +137,17 @@ public class InspectItemDetailPresenter {
                     title_result.setText("检验结果: 合格");
                 }
                 else {
-                    if(!item.isFit(text))
-                        editText.setTextColor(Color.RED);
-                    else
+                    if(item.getDataBean().
+                            getAnalysisWay().contains("定量")){
+                        if(!item.isFit(text))
+                            editText.setTextColor(Color.RED);
+                        else
+                            editText.setTextColor(Color.BLACK);
+                    }
+                    else if(intOf(text)==0)
                         editText.setTextColor(Color.BLACK);
+                        else
+                        editText.setTextColor(Color.RED);
                     title_result.setTextColor(Color.MAGENTA);
                     title_result.setText("检验结果: 不合格");
                 }
@@ -328,7 +336,7 @@ public class InspectItemDetailPresenter {
         alterDecimalFormat(projectName);
         String checkValue =getRandomDouble(lowerSpec,targetValue,upperSpec,projectName);
         item.setFcheckvalue1(checkValue);
-        if(projectName.contains("绞距")) {
+        if(projectName.contains("绞距")&&hasSixValue) {
             if(projectName.contains("铜丝"))
                 item.setFcheckvalue1("19");
             mDatas.set(currentPosition,item);
@@ -344,7 +352,7 @@ public class InspectItemDetailPresenter {
         item.setFcheckvalue2(checkValue);
         checkValue=getRandomDouble(lowerSpec,targetValue,upperSpec,projectName);
         item.setFcheckvalue3(checkValue);
-        if(projectName.contains("硬度")) {
+        if(projectName.contains("硬度")&&hasSixValue) {
             mDatas.set(currentPosition,item);
             valueEditWithItem(item);
             return;

@@ -23,8 +23,7 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
-
-import static com.furja.devicemanager.utils.Constants.CHAT_PUSH_URL;
+import static com.furja.utils.Constants.CHAT_PUSH_URL;
 import static com.furja.utils.Utils.showLog;
 
 /**

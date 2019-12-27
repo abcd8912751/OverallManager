@@ -2,6 +2,7 @@ package com.furja.iqc.presenter;
 
 import com.alibaba.fastjson.JSONException;
 import com.furja.iqc.NetworkChangeReceiver;
+import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
 import com.furja.iqc.json.NewQCList;
 import com.furja.utils.RetrofitBuilder;
@@ -11,6 +12,7 @@ import com.furja.utils.SharpBus;
 import com.furja.utils.TextInputListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,10 +26,12 @@ import static com.furja.utils.Constants.TAG_SCAN_BARCODE;
 import static com.furja.utils.Constants.VERTX_OUTER_URL;
 import static com.furja.utils.Constants.VERTX_TEST_URL;
 import static com.furja.utils.Constants.getVertxUrl;
+import static com.furja.utils.MyCrashHandler.postError;
 import static com.furja.utils.TextInputListener.INPUT_ERROR;
 import static com.furja.utils.Utils.getSubstring;
 import static com.furja.utils.Utils.intOf;
 import static com.furja.utils.Utils.showLog;
+import static com.furja.utils.Utils.showLongToast;
 import static com.furja.utils.Utils.showToast;
 
 /**
@@ -40,11 +44,13 @@ public class IncomingVerifyPresenter {
     List<NewQCList.QCDataBean> QcDataBeans;   //检验项目
     String MaterialInfo;    //报检数量,物料代码,最后一次录入
     List<String> barCodes;      //截去后四位的条码
-    NewQCList qcList;long lastMillis;
+    NewQCList qcList;
+    long lastMillis;
     public IncomingVerifyPresenter(LineVerifyView view) {
         this.verifyView=view;
         sharpBus = SharpBus.getInstance();
-        registerObserver(); resetFieldData();
+        registerObserver();
+        resetFieldData();
     }
 
     /**
@@ -68,7 +74,7 @@ public class IncomingVerifyPresenter {
                                     return;
                                 }
                             long currTimeMillis=System.currentTimeMillis();
-                            if(currTimeMillis-lastMillis<1000){
+                            if(currTimeMillis-lastMillis<500){
                                 showToast("你太勤奋了,我跟不上");
                                 verifyView.showBarCodeEditor();
                                 return;
@@ -91,7 +97,7 @@ public class IncomingVerifyPresenter {
     public void checkAndRequestQclist(final String barCode){
         String QCWEB_URL = getVertxUrl();
         RetrofitHelper helper = RetrofitBuilder.getHelperByUrl(QCWEB_URL);
-        helper.getQcList(barCode)
+        helper.getQcList(barCode, FurjaApp.getUserName())
                 .subscribeOn(Schedulers.io())
                 .retryWhen(RetryWhenUtils.create())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -109,18 +115,18 @@ public class IncomingVerifyPresenter {
                             }
                         } catch (Exception e){
                             removeErrorBarcode(barCode);
-                            Sentry.capture(e);
+                            postError(e);
                         }
                     }
                     else {
                         removeErrorBarcode(barCode);
-                        showToast(response.getMessage());
+                        showLongToast(response.getMessage());
                         verifyView.showBarCodeEditor();
                         verifyView.setEmptyView(R.layout.scan_empty_view);
                     }
                 },error->{
                     error.printStackTrace();
-                    Sentry.capture(error);
+                    postError(error);
                     if(error instanceof JSONException)
                         showToast(SERVER_ABNORMAL);
                     else
@@ -176,8 +182,6 @@ public class IncomingVerifyPresenter {
         return barString+actReceQty;
     }
 
-
-
     /**
      * 将barcodes以逗号分割
      * @param barString
@@ -201,6 +205,7 @@ public class IncomingVerifyPresenter {
     public void resetFieldData() {
         setQcEntryDataBeans(null);
         setMaterialInfo(null);
+        qcList=null;
         barCodes=new ArrayList<>();
         QcDataBeans=new ArrayList<>();
         QcEntryDataBeans=new ArrayList<>();
@@ -234,8 +239,9 @@ public class IncomingVerifyPresenter {
     }
 
 
-
-
+    public NewQCList getQcList() {
+        return qcList;
+    }
 
     public List<NewQCList.QCDataBean> getQcDataBeans() {
         return QcDataBeans;
@@ -243,7 +249,7 @@ public class IncomingVerifyPresenter {
 
     public List<NewQCList.QCValueBean> getQcValueData() {
         if(qcList==null||qcList.getQCValueData()==null)
-            return new ArrayList<NewQCList.QCValueBean>();
+            return Collections.emptyList();
         else
             return qcList.getQCValueData();
     }

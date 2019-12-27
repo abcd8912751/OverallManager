@@ -1,53 +1,54 @@
-package com.furja.iqc.beans;
+package com.furja.common;
 
-import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import com.furja.devicemanager.databases.DaoSession;
+import org.greenrobot.greendao.annotation.NotNull;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.DaoException;
+import com.furja.common.DaoSession;
 
-/**
- * 从网络获取不良项目后保存到本地
- */
 @Entity(active = true)
-public class QMAGroupData {
+public class ProductNumber {
     @Id(autoincrement = true)
     private Long id;
-    private String FNumber;
-    private String FName;
+
+    @NotNull
+    private String productNo;
+
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
+
     /** Used for active entity operations. */
-    @Generated(hash = 1171737613)
-    private transient QMAGroupDataDao myDao;
-    @Generated(hash = 602245871)
-    public QMAGroupData(Long id, String FNumber, String FName) {
+    @Generated(hash = 1793275749)
+    private transient ProductNumberDao myDao;
+
+    @Generated(hash = 796433587)
+    public ProductNumber(Long id, @NotNull String productNo) {
         this.id = id;
-        this.FNumber = FNumber;
-        this.FName = FName;
+        this.productNo = productNo;
     }
-    @Generated(hash = 538397431)
-    public QMAGroupData() {
+
+    @Generated(hash = 6217335)
+    public ProductNumber() {
     }
+
     public Long getId() {
         return this.id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
-    public String getFNumber() {
-        return this.FNumber;
+
+    public String getProductNo() {
+        return this.productNo;
     }
-    public void setFNumber(String FNumber) {
-        this.FNumber = FNumber;
+
+    public void setProductNo(String productNo) {
+        this.productNo = productNo;
     }
-    public String getFName() {
-        return this.FName;
-    }
-    public void setFName(String FName) {
-        this.FName = FName;
-    }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
      * Entity must attached to an entity context.
@@ -59,6 +60,7 @@ public class QMAGroupData {
         }
         myDao.delete(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
      * Entity must attached to an entity context.
@@ -70,6 +72,7 @@ public class QMAGroupData {
         }
         myDao.refresh(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
      * Entity must attached to an entity context.
@@ -81,14 +84,14 @@ public class QMAGroupData {
         }
         myDao.update(this);
     }
-    @Override
-    public String toString() {
-        return FNumber;
-    }
+
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1015966543)
+    @Generated(hash = 797470549)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getQMAGroupDataDao() : null;
+        myDao = daoSession != null ? daoSession.getProductNumberDao() : null;
     }
+
+    
+
 }

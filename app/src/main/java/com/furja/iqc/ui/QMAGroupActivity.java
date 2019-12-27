@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.furja.devicemanager.databases.DaoSession;
+import com.furja.common.DaoSession;
 import com.furja.overall.R;
-import com.furja.iqc.beans.QMAGroupData;
-import com.furja.iqc.beans.QMAGroupDataDao;
+import com.furja.common.QMAGroupData;
+import com.furja.common.QMAGroupDataDao;
 import com.furja.iqc.json.QMAGroupBean;
 import com.furja.utils.RetryWhenUtils;
 import com.furja.iqc.view.MyAutoAdapter;
@@ -33,7 +33,6 @@ import butterknife.ButterKnife;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.furja.utils.Constants.EXTRA_NOREASON_NUMBER;
-import static com.furja.utils.Constants.VERTX_TEST_URL;
 import static com.furja.utils.Constants.getVertxUrl;
 import static com.furja.utils.Utils.getDaoSession;
 import static com.furja.utils.Utils.showLog;

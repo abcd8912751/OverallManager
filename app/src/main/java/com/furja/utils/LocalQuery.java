@@ -1,9 +1,8 @@
-package com.furja.iqc.utils;
+package com.furja.utils;
 
-import com.furja.devicemanager.databases.DaoSession;
-import com.furja.iqc.beans.QMAGroupData;
-import com.furja.iqc.beans.QMAGroupDataDao;
-import com.furja.utils.Utils;
+import com.furja.common.DaoSession;
+import com.furja.common.QMAGroupData;
+import com.furja.common.QMAGroupDataDao;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -23,8 +22,7 @@ public class LocalQuery {
         this.daoSession= Utils.getDaoSession();
     }
 
-    public List<QMAGroupData> query(CharSequence queryString)
-    {
+    public List<QMAGroupData> query(CharSequence queryString) {
         String query
                 ="%"+queryString+"%";
         List<QMAGroupData> results

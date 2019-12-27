@@ -18,7 +18,6 @@ import com.furja.utils.Utils;
 import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
 import com.furja.common.BaseHttpResponse;
-import com.furja.iqc.beans.IncomeCheckOrder;
 import com.furja.iqc.beans.ReferDetail;
 import com.furja.iqc.json.InspectBillJSON;
 import com.furja.iqc.json.ApplyCheckOrder;
@@ -45,11 +44,12 @@ import io.reactivex.schedulers.Schedulers;
 import static com.furja.utils.Constants.EXTRA_NOREASON_NUMBER;
 import static com.furja.utils.Constants.EXTRA_QCDATA_BEAN;
 import static com.furja.utils.Constants.EXTRA_QCENTRY_DATA;
+import static com.furja.utils.Constants.EXTRA_QCLIST_DATA;
 import static com.furja.utils.Constants.EXTRA_QCVALUE_DATA;
-import static com.furja.utils.Constants.VERTX_TEST_URL;
 import static com.furja.utils.Constants.getVertxUrl;
 import static com.furja.utils.Utils.intOf;
 import static com.furja.utils.Utils.showLog;
+import static com.furja.utils.Utils.showLongToast;
 import static com.furja.utils.Utils.showToast;
 import static com.furja.utils.Utils.textOf;
 
@@ -62,7 +62,6 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
             = SharpBus.getInstance();
     InspectItemDetailPresenter detailPresenter;
     long lastPressTime;
-    List<IncomeCheckOrder> incomeCheckOrders;
     List<NewQCList.QCDataBean> qcDataBeans;
 
     @Override
@@ -71,8 +70,8 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
         setContentView(R.layout.activity_inspect_item);
         ButterKnife.bind(this);
         lastPressTime =System.currentTimeMillis();
-        incomeCheckOrders=new ArrayList<>();
-        analyseIntent(getIntent());
+        View view=findViewById(android.R.id.content);
+        detailPresenter =new InspectItemDetailPresenter(view, InspectItemDetailActivity.this);
         TextView textComplete=findViewById(R.id.text_complete);
         textComplete.setOnClickListener(v->{
             if(detailPresenter.isEmpty()) {
@@ -95,7 +94,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
             }
             showConfirmDialog(qualified);
         });
-
+        analyseIntent(getIntent());
     }
 
 
@@ -150,7 +149,6 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        showLog("接收到:+text");
         try {
             if(data!=null) {
                 String text=data.getStringExtra(EXTRA_NOREASON_NUMBER);
@@ -225,7 +223,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                 List<ApplyCheckOrder> orders=new ArrayList<>(),
                         oldOrders=detailPresenter.getmDatas();
                 for(ApplyCheckOrder order:oldOrders){
-                    order.generateValue();
+                    order.generateValue(inspectQty);
                     orders.add(order);
                 }
                 inspectBillJSON.setFItemDetail(orders);
@@ -241,10 +239,12 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
         }).retryWhen(RetryWhenUtils.create())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response->{
-                    showToast(response.getResult());
                     materialDialog.cancel();
-                    if(response.getCode()>0)
+                    if(response.getCode()>0) {
+                        showToast(response.getResult());
                         backToParentActivity();
+                    }else
+                        showLongToast(response.getResult());
                 },error->{
                     error.printStackTrace();
                     showToast("网络异常,请重试");
@@ -273,26 +273,26 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
             Observable.fromCallable(new Callable<List<ApplyCheckOrder>>() {
                 @Override
                 public List<ApplyCheckOrder> call() throws Exception {
-                    String extraString=intent.getStringExtra(EXTRA_QCENTRY_DATA);
-                    String extraQcData=intent.getStringExtra(EXTRA_QCDATA_BEAN);
-                    String extraValue=intent.getStringExtra(EXTRA_QCVALUE_DATA);
-                    qcDataBeans=JSON.parseArray(extraQcData,NewQCList.QCDataBean.class);
-                    List<NewQCList.QCEntryDataBean> databeans
-                            = JSON.parseArray(extraString,NewQCList.QCEntryDataBean.class);
+                    NewQCList qcList=intent.getParcelableExtra(EXTRA_QCLIST_DATA);
+                    if(qcList==null){
+                        showLog("没有质检数据");
+                        backToParentActivity();
+                        return null;
+                    }
+                    qcDataBeans=qcList.getQCData();
+                    List<NewQCList.QCEntryDataBean> databeans = qcList.getQCEntryData();
                     if(databeans==null||databeans.isEmpty()) {
                         showLog("没有质检项目数据");
                         backToParentActivity();
                         return null;
                     }
-                    List<ApplyCheckOrder> orders
-                            =new ArrayList<ApplyCheckOrder>();
+                    List<NewQCList.QCValueBean> valueBeans =qcList.getQCValueData();
+                    List<ApplyCheckOrder> orders =new ArrayList<ApplyCheckOrder>();
                     NewQCList.QCDataBean qcDataBean= qcDataBeans.get(0);
-                    List<NewQCList.QCValueBean> valueBeans
-                            =JSON.parseArray(extraValue,NewQCList.QCValueBean.class);
                     int i=0,valueSize=valueBeans.size();
                     for(NewQCList.QCEntryDataBean dataBean:databeans) {
                         ApplyCheckOrder order=new ApplyCheckOrder(dataBean,i);
-                        if(i<valueSize&&!dataBean.isFKeyInspect())
+                        if(i<valueSize&&dataBean.isFKeyInspect())
                             order.fillCheckValue(valueBeans.get(i));
                         order.setSampleScheme(dataBean.getFSampleSchemeId1());
                         order.setFInspectItemId(dataBean.getFInspectItemId());
@@ -304,8 +304,6 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                         orders.add(order);
                         i++;
                     }
-                    View view=findViewById(android.R.id.content);
-                    detailPresenter =new InspectItemDetailPresenter(view, InspectItemDetailActivity.this);
                     if(textOf(qcDataBean.getMaterialName()).contains("电源线"))
                         detailPresenter.setHasSixValue(true);
                     return orders;

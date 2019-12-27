@@ -102,7 +102,7 @@ public class ApplyCheckOrder {
     /**
      * 生成合乎规则的检测值
      */
-    public void generateValue() {
+    public void generateValue(int inspectQty) {
         InspectValueItem inspectValueItem=new InspectValueItem();
         this.FAcceptQty1 = intOf(dataBean.getAcceptQty());
         this.FRejectQty1 = intOf(dataBean.getRejectQty());
@@ -134,6 +134,7 @@ public class ApplyCheckOrder {
         }
         this.FSampleQty1 = intOf(dataBean.getSampleQty());
         this.FSampleQty1 = Math.max(valueSize,FSampleQty1);
+        this.FSampleQty1 = Math.min(inspectQty,FSampleQty1);
         this.FTargetValQ = doubleOf(dataBean.getTargetValue());
         this.FUpLimitQ = doubleOf(dataBean.getUpperSpec());
         this.FDownLimitQ=doubleOf(dataBean.getLowerSpec());

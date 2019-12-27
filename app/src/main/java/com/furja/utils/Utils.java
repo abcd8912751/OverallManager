@@ -10,30 +10,30 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Looper;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.alibaba.fastjson.JSON;
+import com.furja.common.BadMaterialLogDao;
+import com.furja.common.BadTypeConfigDao;
+import com.furja.common.DaoSession;
 import com.furja.common.Preferences;
-import com.furja.devicemanager.databases.DaoMaster;
-import com.furja.devicemanager.databases.DaoSession;
-import com.furja.iqc.beans.QMAGroupData;
-import com.furja.iqc.beans.QMAGroupDataDao;
+import com.furja.common.DaoMaster;
+import com.furja.common.QMAGroupData;
+import com.furja.common.QMAGroupDataDao;
 import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
-import com.furja.overall.databases.BadMaterialLog;
-import com.furja.overall.databases.BadMaterialLogDao;
-import com.furja.overall.databases.BadTypeConfig;
-import com.furja.overall.databases.BadTypeConfigDao;
-import com.furja.overall.databases.ErrorLog;
-import com.furja.overall.databases.ErrorLogDao;
+import com.furja.common.BadMaterialLog;
+import com.furja.common.BadTypeConfig;
 import com.furja.overall.json.BadTypeConfigJson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -50,7 +50,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
@@ -96,6 +95,29 @@ public class Utils {
      * 显示Toast
      * @param msg
      */
+    public static void showLongToast(final String msg) {
+        showLog(msg);
+        new Thread(){
+            public void run(){
+                try {
+                    Looper.prepare();
+                    Context context= FurjaApp.getContext();
+                    if (Build.VERSION.SDK_INT>24)
+                        Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
+                    else
+                        AnimToast.makeText(context,msg).setDelay(2).show();
+                    Looper.loop();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    /**
+     * 显示Toast
+     * @param msg
+     */
     public static void showToast(final String msg) {
         showLog(msg);
         new Thread(){
@@ -103,7 +125,10 @@ public class Utils {
                 try {
                     Looper.prepare();
                     Context context= FurjaApp.getContext();
-                    AnimToast.makeText(context,msg).show();
+                    if (Build.VERSION.SDK_INT>24)
+                        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+                    else
+                        AnimToast.makeText(context,msg).show();
                     Looper.loop();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -300,24 +325,9 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //上传异常日志
-        uploadErrorLogs();
 
     }
 
-
-
-    public  static void uploadErrorLogs() {
-        DaoSession daoSession= FurjaApp.getDaoSession();
-        ErrorLogDao dao=daoSession.getErrorLogDao();
-        List<ErrorLog> errlogs =dao.queryBuilder()
-                .where(ErrorLogDao.Properties.IsUploaded.eq(false))
-                .list();
-        if(errlogs!=null) {
-            for(ErrorLog errorLog:errlogs)
-                errorLog.upload();
-        }
-    }
 
     /**
      * 禁用输入法即只允许条码扫码
@@ -400,13 +410,6 @@ public class Utils {
     public static void closeDb() {
         if(helper!=null)
             helper.close();
-    }
-
-    public static void delete(ErrorLog errorLog) {
-        DaoSession daoSession= FurjaApp.getDaoSession();
-        ErrorLogDao dao=daoSession.getErrorLogDao();
-        dao.delete(errorLog);
-        showLog("已删除");
     }
 
 

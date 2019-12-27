@@ -31,8 +31,7 @@ public class RetrofitBuilder {
     }
 
     public static <T> T getHelperByUrl(String baseUrl,Class<T> tClass) {
-        builder
-                = RetrofitHolder.retrofitBuilder;
+        builder= RetrofitHolder.retrofitBuilder;
         Retrofit retrofit
                 = builder
                 .baseUrl(baseUrl)

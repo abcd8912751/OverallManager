@@ -1,7 +1,9 @@
 package com.furja.overall.ui.own;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,6 +61,7 @@ public class OwnFragment extends BaseFragment {
     /**
      * 初始化视图
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initView() {
         PreferenceItem item=new PreferenceItem("检查更新");
         PreferenceItem item1=new PreferenceItem("切换账号");
@@ -89,7 +93,9 @@ public class OwnFragment extends BaseFragment {
                     break;
             }
         });
-        textView.setText(FurjaApp.getUserName());
+        String userName=FurjaApp.getUserName();
+        userName=userName.isEmpty()?"请先登录":userName;
+        textView.setText(userName);
         textView.setOnClickListener(v->{
             if(FurjaApp.getUser()==null)
                 switchToLogin();
@@ -112,8 +118,8 @@ public class OwnFragment extends BaseFragment {
                 }
             });
             spinnerOrg.setVisibility(View.VISIBLE);
-            FurjaApp.setCloudUser(adapter.getItem(0));
         }
+        recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER); //设定边界无波纹动画
     }
 
 
