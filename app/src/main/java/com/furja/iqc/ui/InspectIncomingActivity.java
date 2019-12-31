@@ -108,7 +108,7 @@ public class InspectIncomingActivity extends BaseActivity implements IncomingVer
     private void initWebView() {
         emptyWebView =View.inflate(this,R.layout.layout_websurf,null);
         LinearLayout linearLayout= emptyWebView.findViewById(R.id.linear_layout);
-        String url="http://192.168.8.46:8118/FJAPIManage/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
+        String url="http://192.168.9.4:3532/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
         String userName = FurjaApp.getUserName();
         url = url +userName;
         agentWeb = AgentWeb.with(this)

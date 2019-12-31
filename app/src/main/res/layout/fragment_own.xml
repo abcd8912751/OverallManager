@@ -8,7 +8,7 @@
         android:id="@+id/image_avator"
         android:layout_width="@dimen/dp_100"
         android:layout_height="@dimen/dp_100"
-        app:srcCompat="@drawable/ic_avator"
+        app:srcCompat="@mipmap/ic_avator"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/recycler_preference"

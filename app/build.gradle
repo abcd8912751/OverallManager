@@ -2,16 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.furja.overallmanager"
-        minSdkVersion 18
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
-        versionName "1.1227"
+        versionName "1.1231"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "zh-rCN"
-        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -21,9 +19,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -53,7 +51,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
@@ -75,8 +72,9 @@ dependencies {
     implementation 'q.rorbin:badgeview:1.1.3'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.7.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
+//    暂不升级retrofit,升级后将不适配于4.2.2
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
     implementation 'com.github.BaronZ88:Retrofit2-FastJson-Converter:1.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.15'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'

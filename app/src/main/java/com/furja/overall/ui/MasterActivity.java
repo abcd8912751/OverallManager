@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.furja.common.Preferences;
 import com.furja.overall.R;
+import com.furja.utils.AutoUpdateUtils;
 import com.furja.utils.MyCrashHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -44,6 +45,7 @@ public class MasterActivity extends BaseActivity {
         navController.navigate(R.id.navigation_qc);
         vertifyPermission();
         silentLogin();
+		new AutoUpdateUtils(this,true).checkUpdate();
     }
     public void vertifyPermission(){
         int REQUEST_EXTERNAL_STORAGE = 1;

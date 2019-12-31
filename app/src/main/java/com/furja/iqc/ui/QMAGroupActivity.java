@@ -16,13 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.furja.common.DaoSession;
+import com.furja.common.WrapLinearLayoutManager;
 import com.furja.overall.R;
 import com.furja.common.QMAGroupData;
 import com.furja.common.QMAGroupDataDao;
 import com.furja.iqc.json.QMAGroupBean;
 import com.furja.utils.RetryWhenUtils;
 import com.furja.iqc.view.MyAutoAdapter;
-import com.furja.iqc.view.WrapLinearLayoutManager;
 import com.furja.utils.RetrofitBuilder;
 import com.furja.utils.RetrofitHelper;
 

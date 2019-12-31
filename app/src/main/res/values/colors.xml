@@ -10,10 +10,11 @@
     <color name="white">#FFFFFF</color>
     <color name="holo_circle">#ffcc33cc</color>
     <color name="holo_text">#ff0f82f6</color>
+    <color name="color_dark">#B8ACAC</color>
     <color name="holo_purple">#ff00ff00</color>
     <color name="colorBasic">#f02196f3</color>
     <color name="colorBottomBg">#cccccc</color>
-    <color name="primary_text">#ff0f82f6</color>
+    <color name="primary_text">#3C4264</color>
     <color name="radioText_color">#ff6201</color>
     <color name="colorUpload">#fb6f47</color>
     <color name="colorLegendTextBg">#EEEEEE</color>

@@ -70,6 +70,6 @@ public interface RetrofitHelper {
     Observable<BaseHttpResponse<String>> login(@Query("username") String userName,@Query("password") String password);
 
     @GET("k3cloud/inspecthistory")
-    Observable<BaseHttpResponse<List<InspectHistoryLog>>> getInspectHistory();
+    Observable<BaseHttpResponse<List<InspectHistoryLog>>> getInspectHistory(@Query("username") String userName);
 
 }

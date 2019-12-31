@@ -19,6 +19,7 @@ public class InspectBillJSON {
     private String FQcScheme;
     private String FSourceOrgNumber;
     private String FCurrentOrgNumber;
+    private String FSupplierNumber;
     public String getUserName() {
         return userName;
     }
@@ -33,6 +34,14 @@ public class InspectBillJSON {
 
     public void setFQcScheme(String FQcScheme) {
         this.FQcScheme = FQcScheme;
+    }
+
+    public String getFSupplierNumber() {
+        return FSupplierNumber;
+    }
+
+    public void setFSupplierNumber(String FSupplierNumber) {
+        this.FSupplierNumber = FSupplierNumber;
     }
 
     public String getUserPass() {

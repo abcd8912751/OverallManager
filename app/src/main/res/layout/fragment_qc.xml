@@ -5,73 +5,77 @@
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:id="@+id/card_ipqc"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_4"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/card_qcboard">
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/text_ipqc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_ipqc"
-            android:drawableTop="@drawable/ic_ipqc_top"
-            android:padding="@dimen/dp_24"
+            android:drawableTop="@mipmap/ic_ipqc_top"
+            android:layout_gravity="center"
             />
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:id="@+id/card_qcboard"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_4"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/card_ipqc"
         app:layout_constraintEnd_toStartOf="@+id/card_sopOnline"
         >
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/text_qcboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_qcboard"
-            android:drawableTop="@drawable/ic_qcboard_top"
-            android:padding="@dimen/dp_24"
+            android:drawableTop="@mipmap/ic_qcboard_top"
+            android:layout_gravity="center"
             />
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:id="@+id/card_sopOnline"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_4"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/card_qcboard"
         app:layout_constraintEnd_toEndOf="parent"
         >
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/text_sopOnline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_sopOnline"
-            android:drawableTop="@drawable/ic_sop_top"
-            android:padding="@dimen/dp_24"
+            android:drawableTop="@mipmap/ic_sop_top"
+            android:layout_gravity="center"
             />
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:id="@+id/card_inspectHistory"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_4"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toBottomOf="@+id/card_ipqc"
         app:layout_constraintStart_toStartOf="@+id/card_ipqc"
         app:layout_constraintEnd_toEndOf="@+id/card_ipqc"
         >
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/text_inspectHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_inspectHistory"
-            android:drawableTop="@drawable/ic_inspecthistory_top"
-            android:padding="@dimen/dp_24"
+            android:drawableTop="@mipmap/ic_inspecthistory_top"
+            android:layout_gravity="center"
             />
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

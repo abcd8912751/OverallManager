@@ -200,6 +200,7 @@ public class NewQCList implements Parcelable {
         private int FOrderEntrySeq;
         private String FUnitNumber;
         private String FSourceOrgNumber;
+        private String supplyNumber;
         public String getFOrderType() {
             return FOrderType;
         }
@@ -262,6 +263,14 @@ public class NewQCList implements Parcelable {
 
         public void setFSourceOrgNumber(String FSourceOrgNumber) {
             this.FSourceOrgNumber = FSourceOrgNumber;
+        }
+
+        public String getSupplyNumber() {
+            return supplyNumber;
+        }
+
+        public void setSupplyNumber(String supplyNumber) {
+            this.supplyNumber = supplyNumber;
         }
 
         public String getSupplyDate() {
@@ -395,6 +404,7 @@ public class NewQCList implements Parcelable {
             dest.writeInt(this.FOrderEntrySeq);
             dest.writeString(this.FUnitNumber);
             dest.writeString(this.FSourceOrgNumber);
+            dest.writeString(this.supplyNumber);
         }
 
         public QCDataBean() {
@@ -421,6 +431,7 @@ public class NewQCList implements Parcelable {
             this.FOrderEntrySeq = in.readInt();
             this.FUnitNumber = in.readString();
             this.FSourceOrgNumber = in.readString();
+            this.supplyNumber=in.readString();
         }
 
         public static final Creator<QCDataBean> CREATOR = new Creator<QCDataBean>() {

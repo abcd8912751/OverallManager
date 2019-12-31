@@ -9,10 +9,10 @@ import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.alibaba.fastjson.JSON;
 import com.furja.common.CloudUserWithOrg;
 import com.furja.common.JustCallBack;
 import com.furja.common.RecyclerBottomSheetFragment;
+import com.furja.common.WrapLinearLayoutManager;
 import com.furja.iqc.presenter.InspectItemDetailPresenter;
 import com.furja.utils.Utils;
 import com.furja.overall.FurjaApp;
@@ -28,7 +28,6 @@ import com.furja.overall.ui.BaseActivity;
 import com.furja.utils.RetrofitBuilder;
 import com.furja.utils.RetrofitHelper;
 import com.furja.utils.SharpBus;
-import com.furja.iqc.view.WrapLinearLayoutManager;
 import com.furja.common.User;
 
 import java.util.ArrayList;
@@ -42,10 +41,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import static com.furja.utils.Constants.EXTRA_NOREASON_NUMBER;
-import static com.furja.utils.Constants.EXTRA_QCDATA_BEAN;
-import static com.furja.utils.Constants.EXTRA_QCENTRY_DATA;
 import static com.furja.utils.Constants.EXTRA_QCLIST_DATA;
-import static com.furja.utils.Constants.EXTRA_QCVALUE_DATA;
 import static com.furja.utils.Constants.getVertxUrl;
 import static com.furja.utils.Utils.intOf;
 import static com.furja.utils.Utils.showLog;
@@ -220,6 +216,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                 inspectBillJSON.setFUnitNumber(topBean.getFUnitNumber());
                 inspectBillJSON.setFQcScheme(topBean.getQcScheme());
                 inspectBillJSON.setFSourceOrgNumber(topBean.getFSourceOrgNumber());
+                inspectBillJSON.setFSupplierNumber(topBean.getSupplyNumber());
                 List<ApplyCheckOrder> orders=new ArrayList<>(),
                         oldOrders=detailPresenter.getmDatas();
                 for(ApplyCheckOrder order:oldOrders){

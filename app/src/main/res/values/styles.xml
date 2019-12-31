@@ -57,7 +57,6 @@
 
     <style name="BottomSheetDialog" parent="@style/Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/BottomSheet</item>
-        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
     <style name="AnimHorizontal" parent="@android:style/Animation">
