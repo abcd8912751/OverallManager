@@ -40,6 +40,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.http.GET;
 
 import static com.furja.utils.Constants.LOG_TAG;
+import static com.furja.utils.Constants.getVertxUrl;
 import static com.furja.utils.Utils.showLog;
 import static com.furja.utils.Utils.showToast;
 
@@ -50,17 +51,13 @@ import static com.furja.utils.Utils.showToast;
 public class AutoUpdateUtils {
     private Context context;
     private boolean backGround;
-    private static String FURJA_BCWEB_URL
-            ="http://192.168.10.5:5050/bcwebservice/";
 
-    public AutoUpdateUtils(Context uiContext, boolean isbackGround)
-    {
+    public AutoUpdateUtils(Context uiContext, boolean isbackGround) {
         this.context=uiContext;
         this.backGround=isbackGround;
     }
 
-    public AutoUpdateUtils(Context uiContext)
-    {
+    public AutoUpdateUtils(Context uiContext) {
         this.context=uiContext;
         this.backGround=false;
     }
@@ -90,15 +87,13 @@ public class AutoUpdateUtils {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(false)
-                //其他配置
                 .build();
         Retrofit.Builder builder=new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(FastJsonConverterFactory.create())
                 .client(okHttpClient);
-        UpdateHelper helper
-                =   builder
-                .baseUrl(FURJA_BCWEB_URL).build()
+        UpdateHelper helper = builder
+                .baseUrl(getVertxUrl()).build()
                 .create(UpdateHelper.class);
         helper.getVersionInfo()
                 .subscribeOn(Schedulers.io())
@@ -134,7 +129,7 @@ public class AutoUpdateUtils {
                     public void accept(List<AutoUpdateJson> autoUpdateJsons) throws Exception {
                         for (AutoUpdateJson json : autoUpdateJsons) {
                             if (getPackageName().equals(json.getPackageName())) {
-                                showLog("找到了报名一致的ApkUrl");
+                                showLog("找到了包名一致的ApkUrl");
                                 executeUpdateJson(json);
                                 return;
                             }
@@ -146,9 +141,7 @@ public class AutoUpdateUtils {
                     public void accept(Throwable throwable) throws Exception {
                         throwable.printStackTrace();
                         if(throwable instanceof JSONException)
-                        {
                             showLog("没有适合的数据");
-                        }
                         showNoUpdateToast();
                     }
                 });
@@ -194,14 +187,18 @@ public class AutoUpdateUtils {
         builder.title("检测到新版本");
         builder.content(json.getUpdateInfo());
         builder.positiveText("立即更新")
+                .cancelable(!json.isForceUpdate())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                         materialDialog.cancel();
-                        if(!TextUtils.isEmpty(json.getLatestApkUrl()))
-                            downloadApkFromUrl(json.getLatestApkUrl());
+                        String url=json.getLatestApkUrl();
+                        if(!TextUtils.isEmpty(url))
+                            downloadApkFromUrl(url);
                     }
-                }).negativeText("下次再说");
+                });
+        if(!json.isForceUpdate())
+            builder.negativeText("下次再说");
         MaterialDialog dialog=builder.show();
         dialog.getWindow()
                 .setBackgroundDrawableResource(R.drawable.shape_dialog_bg);
@@ -212,7 +209,7 @@ public class AutoUpdateUtils {
      * 从服务器下载 Apk
      * @param latestApkUrl
      */
-    private void downloadApkFromUrl(final String latestApkUrl) {
+    private void downloadApkFromUrl(String latestApkUrl) {
         String path=Environment.getExternalStorageDirectory().getPath()+"/Download";
         String apkName=getNameFromUrl(latestApkUrl);
         File file=new File(path,apkName);
@@ -227,6 +224,7 @@ public class AutoUpdateUtils {
         downLoadDialog.show();
         downLoadDialog.getWindow()
                 .setBackgroundDrawableResource(R.drawable.shape_dialog_bg);
+        latestApkUrl=getVertxUrl()+latestApkUrl;
         OkHttpUtils.get()
                 .url(latestApkUrl)
                 .build()
@@ -234,6 +232,7 @@ public class AutoUpdateUtils {
                     @Override
                     public void onError(okhttp3.Call call, Exception e, int id) {
                         showToast("下载异常");
+                        e.printStackTrace();
                         downLoadDialog.cancel();
                     }
                     @Override
@@ -273,7 +272,8 @@ public class AutoUpdateUtils {
         if(file==null||!file.exists()) {
             showLog("更新");
             return;
-        } if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             boolean installAllowed=context.getPackageManager().canRequestPackageInstalls();
             if (installAllowed)
                 installApkFile(file);
@@ -284,6 +284,8 @@ public class AutoUpdateUtils {
                 installApkFile(file);
             }
         }
+        else
+            installApkFile(file);
     }
 
     private void installApkFile(File file) {
@@ -343,8 +345,17 @@ public class AutoUpdateUtils {
         private int versionCode;
         private String versionName;
         private String updateInfo;
+        private boolean forceUpdate;
         public String getLatestApkUrl() {
             return latestApkUrl;
+        }
+
+        public boolean isForceUpdate() {
+            return forceUpdate;
+        }
+
+        public void setForceUpdate(boolean forceUpdate) {
+            this.forceUpdate = forceUpdate;
         }
 
         public void setLatestApkUrl(String latestApkUrl) {
@@ -389,7 +400,7 @@ public class AutoUpdateUtils {
      */
     interface UpdateHelper
     {
-        @GET("apk/AutoUpdate/version.txt")
+        @GET("files/apk/version.txt")
         Observable<ResponseBody> getVersionInfo();
     }
 }

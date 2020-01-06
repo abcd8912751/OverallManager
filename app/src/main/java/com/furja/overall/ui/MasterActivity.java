@@ -45,7 +45,6 @@ public class MasterActivity extends BaseActivity {
         navController.navigate(R.id.navigation_qc);
         vertifyPermission();
         silentLogin();
-		new AutoUpdateUtils(this,true).checkUpdate();
     }
     public void vertifyPermission(){
         int REQUEST_EXTERNAL_STORAGE = 1;
@@ -66,15 +65,15 @@ public class MasterActivity extends BaseActivity {
         super.onResume();
         if(disposable!=null)
             disposable.dispose();
+        new AutoUpdateUtils(this,true).checkUpdate();
     }
 
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
-        disposable = Observable.timer(30,TimeUnit.SECONDS)
+        disposable = Observable.timer(10,TimeUnit.MINUTES)
                 .subscribe(event->{ //30S未操作就自行退出
                     System.exit(0);
                 },error->{
-            });
-    }
+            });    }
 }

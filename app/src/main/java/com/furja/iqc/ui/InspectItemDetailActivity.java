@@ -1,11 +1,16 @@
 package com.furja.iqc.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -40,6 +45,8 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.furja.iqc.ui.LinearDialogFragment.DIALOG_SOP_ONLINE;
 import static com.furja.utils.Constants.EXTRA_NOREASON_NUMBER;
 import static com.furja.utils.Constants.EXTRA_QCLIST_DATA;
 import static com.furja.utils.Constants.getVertxUrl;
@@ -59,12 +66,12 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
     InspectItemDetailPresenter detailPresenter;
     long lastPressTime;
     List<NewQCList.QCDataBean> qcDataBeans;
-
+    LinearDialogFragment webviewFragment,sopOnlineFragment;
+    FragmentManager fragmentManager;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspect_item);
-        ButterKnife.bind(this);
         lastPressTime =System.currentTimeMillis();
         View view=findViewById(android.R.id.content);
         detailPresenter =new InspectItemDetailPresenter(view, InspectItemDetailActivity.this);
@@ -79,7 +86,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
             boolean qualified=true;
             for(ApplyCheckOrder order:orders){
                 if(!order.hasCheck()) {
-                    showToast("存在尚未检验的项目");
+                    showToast("存在尚未检验的定量分析项目");
                     detailPresenter.setPositionAndValue(index);
                     detailPresenter.generateSpinnerItems(index);
                     return;
@@ -91,9 +98,11 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
             showConfirmDialog(qualified);
         });
         analyseIntent(getIntent());
+        fragmentManager = getSupportFragmentManager();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
-
 
     /**
      * 生成确认对话框
@@ -109,9 +118,10 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                     materialDialog.setContent("正在提交...");
                     materialDialog.setCancelable(false);
                     generateAndUploadJson("A",materialDialog);  //接收为A
+                }).onNegative((dialog, which) -> {
+                    dialog.cancel();
                 });
-
-        if(!qualified){
+        if(!qualified) {
             builder.neutralText("让步接收").onNeutral((materialDialog, dialogAction)->{
                 materialDialog.getActionButton(DialogAction.POSITIVE).setVisibility(View.GONE);
                 materialDialog.getActionButton(DialogAction.NEUTRAL).setVisibility(View.GONE);
@@ -126,7 +136,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                 materialDialog.setContent("正在提交...");
                 materialDialog.setCancelable(false);
                 generateAndUploadJson("F",materialDialog);  //判退为A
-            });;
+            });
         }
         builder.show().getWindow()
                 .setBackgroundDrawableResource(R.drawable.shape_dialog_bg);
@@ -249,7 +259,6 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                 });
     }
 
-
     /**
      * 返回父级 Activity
      */
@@ -259,7 +268,6 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
         startActivity(intent);
         finish();
     }
-
 
     /**
      * 处理接受的Intent,将其携带的数据加载至RecyclerView
@@ -334,6 +342,22 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
     }
 
     @Override
+    protected void pushToRight() {
+        if(webviewFragment==null)
+            webviewFragment = new LinearDialogFragment();
+        String tag="InspectDetailWebFragment";
+        webviewFragment.show(fragmentManager,tag);
+    }
+
+    @Override
+    protected void pushToLeft() {
+        if(sopOnlineFragment==null)
+            sopOnlineFragment = new LinearDialogFragment(DIALOG_SOP_ONLINE);
+        String tag="InspectDetailSopOnline";
+        sopOnlineFragment.show(fragmentManager,tag);
+    }
+
+    @Override
     protected void showSheetDialog() {
         RecyclerBottomSheetFragment<ApplyCheckOrder> sheetFragment=
                 new RecyclerBottomSheetFragment<>(detailPresenter.getmDatas());
@@ -348,16 +372,18 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
             }
         });
         sheetFragment.setTitle("检验项目清单");
-        sheetFragment.show(getSupportFragmentManager(),"InspectItemDetailActivitySheet");
+        sheetFragment.show(fragmentManager,"InspectItemDetailActivitySheet");
     }
 
     @Override
     protected void pageDown() {
+        detailPresenter.hideSoftInput();
         detailPresenter.navToNext();
     }
 
     @Override
     protected void pageUp() {
+        detailPresenter.hideSoftInput();
         detailPresenter.navToPrev();
     }
 }

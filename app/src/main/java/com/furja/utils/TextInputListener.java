@@ -3,6 +3,10 @@ package com.furja.utils;
 /**
  * 输入框 输入完成监听
  */
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -18,13 +22,19 @@ import static com.furja.utils.Utils.showToast;
 /**
  * 输入框输入完成的监听,当输入完成调用其中方法
  */
-public class TextInputListener implements View.OnKeyListener,EditText.OnEditorActionListener {
+public class TextInputListener  extends BroadcastReceiver implements View.OnKeyListener,EditText.OnEditorActionListener {
     private long lastTimeMillis;
     SharpBus sharpBus;
     public static String INPUT_ERROR="条码格式错误";
     public TextInputListener() {
         sharpBus = SharpBus.getInstance();
     }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        analyseIntent(intent);
+    }
+
     @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
@@ -38,6 +48,23 @@ public class TextInputListener implements View.OnKeyListener,EditText.OnEditorAc
         if (i == EditorInfo.IME_ACTION_DONE)
             excuteInput(textView.getText()+"");
         return false;
+    }
+
+    /**
+     * 解析Intent
+     * @param intent
+     */
+    private void analyseIntent(Intent intent) {
+        if(intent==null)
+            return;
+        String action=intent.getAction();
+        if(!TextUtils.isEmpty(action)){
+            if(action.contains("barcode")){
+                String barcode=intent.getStringExtra("BARCODE");
+                if(!TextUtils.isEmpty(barcode))
+                    excuteInput(barcode);
+            }
+        }
     }
 
     public static void bind(EditText editText){

@@ -1,7 +1,8 @@
 package com.furja.iqc.presenter;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.alibaba.fastjson.JSONException;
-import com.furja.iqc.NetworkChangeReceiver;
 import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
 import com.furja.iqc.json.NewQCList;
@@ -10,6 +11,8 @@ import com.furja.utils.RetrofitHelper;
 import com.furja.utils.RetryWhenUtils;
 import com.furja.utils.SharpBus;
 import com.furja.utils.TextInputListener;
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +31,6 @@ import static com.furja.utils.Constants.VERTX_TEST_URL;
 import static com.furja.utils.Constants.getVertxUrl;
 import static com.furja.utils.MyCrashHandler.postError;
 import static com.furja.utils.TextInputListener.INPUT_ERROR;
-import static com.furja.utils.Utils.getSubstring;
 import static com.furja.utils.Utils.intOf;
 import static com.furja.utils.Utils.showLog;
 import static com.furja.utils.Utils.showLongToast;
@@ -46,18 +48,20 @@ public class IncomingVerifyPresenter {
     List<String> barCodes;      //截去后四位的条码
     NewQCList qcList;
     long lastMillis;
-    public IncomingVerifyPresenter(LineVerifyView view) {
+    public IncomingVerifyPresenter(LineVerifyView view, LifecycleOwner lifeOwner) {
         this.verifyView=view;
         sharpBus = SharpBus.getInstance();
-        registerObserver();
+        registerObserver(lifeOwner);
         resetFieldData();
     }
 
     /**
      * 注册观察者
+     * @param lifeOwner
      */
-    private void registerObserver() {
-        sharpBus.register(TAG_SCAN_BARCODE)
+    private void registerObserver(LifecycleOwner lifeOwner) {
+        sharpBus.register(TAG_SCAN_BARCODE,this)
+                .as(AutoDispose.<Object>autoDisposable(AndroidLifecycleScopeProvider.from(lifeOwner)))
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {

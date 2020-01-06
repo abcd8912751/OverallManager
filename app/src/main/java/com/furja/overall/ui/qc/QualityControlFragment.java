@@ -7,18 +7,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import com.furja.alertsop.ui.SopActivity;
+
+import com.furja.iqc.ui.SopActivity;
 import com.furja.common.BaseFragment;
 import com.furja.iqc.ui.InspectIncomingActivity;
 import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
-import com.furja.overall.ui.LoginActivity;
 import com.furja.overall.ui.OneFragmentActivity;
 import com.furja.overall.ui.WebSurfActivity;
 
@@ -27,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import static com.furja.utils.Constants.EXTRA_WEBVIEW_TITLE;
 import static com.furja.utils.Constants.EXTRA_WEBVIEW_URL;
+import static com.furja.utils.Constants.getCloudUrl;
 import static com.furja.utils.Utils.dp2px;
 import static com.furja.utils.Utils.showLog;
 
@@ -79,10 +77,9 @@ public class QualityControlFragment extends BaseFragment {
                 break;
             case R.id.card_qcboard:
                 intent.setClass(getContext(), WebSurfActivity.class);
-                String iqcUrl="http://192.168.9.4:3532/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
+                String iqcUrl=getCloudUrl()+"/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
                 String userName = FurjaApp.getUserName();
                 iqcUrl = iqcUrl +userName;
-                showLog(iqcUrl);
                 intent.putExtra(EXTRA_WEBVIEW_URL,iqcUrl);
                 intent.putExtra(EXTRA_WEBVIEW_TITLE,"派单看板");
                 startActivity(intent);

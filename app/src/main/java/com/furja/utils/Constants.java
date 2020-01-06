@@ -3,7 +3,8 @@ package com.furja.utils;
 
 import androidx.annotation.NonNull;
 
-import com.furja.alertsop.services.NetworkChangeReceiver;
+import com.furja.overall.receiver.NetworkChangeReceiver;
+
 
 public class Constants {
     public static final String LOG_TAG="Overall_manager";
@@ -17,6 +18,8 @@ public class Constants {
     public static final String FURJA_INNER_URL="http://192.168.8.46:8118/";
     public static final String FURJA_OUTER_URL="http://www.nbfurja.com/";
     public static final String EXCEPTION_LOG_URL="http://192.168.10.92:8377/";
+    public static final String FURJA_CLOUDINNER_URL="http://192.168.9.4:3532";
+    public static final String FURJA_CLOUDOUTER_URL="http://www.nbfurja.com:3532";
     public static final String FURJA_BARCODEINFO_URL ="http://192.168.8.46:8118/FJCommonInterface/GetBarCodeInfo/";
     public static final String FURJA_RELEASE_URL ="http://192.168.8.46:8118/FJBadTypeInterface/SendProductRelease/";
     public static final String UPLOAD_FINISH="uploadfinish";
@@ -52,22 +55,16 @@ public class Constants {
     public static final String FURIA_BADTYPEBASIC_URL ="/FJBadTypeInterface/GetBadTypeBasicData";
     public static final String FJ_BADTYPETOTAL_WORKPLACE ="/FJBadTypeInterface/GetBadTypeTotal/";
     public static final String ZOOM_EXTRA_NAME="url-List";
-    //当点击Button或提交时传递该Tag事件
     public static final String UPDATE_BAD_COUNT ="UPDATE_BAD_COUNT";
     public static final String FRAGMENT_ON_TOUCH ="FRAGMENT_ON_TOUCH";
     public static final String BADLOG_FRAGMENT_INITFINISH ="updateBadLogWithBtn_Data";
-    //根据物料信息更新工单列表
     public static final String UPDATE_WORKORDER_BY_MATERIAL ="updateBY_MATERIAL_INFO";
-    //更新Button计数所在Fragment数据
     public static final String UPDATE_BADLOGWITHBTN="freshTheButtonFragment";
-    //更新KeyBoard所在Fragment数据
     public static final String UPDATE_BADLOGWITHKEY="freshTheKeyBoardFragment";
-    //同步异常类型配置完成后传递此事件
     public static final String SYNCOVER_BADTYPE_CONFIG="freshTheKeyBoardFragment";
     public static final String ALARM_ACTION_ON="ui.splash.alarm";
     public static final String INTER_SPLIT =" -> ";
     public static final String NODATA_AVAILABLE="没有找到符合条件的结果";
-    //为录入异常数据使用视图的标识,-1为没有设置
     public static final int TYPE_BADLOG_WITHBTN=1;  //注塑车间
     public static final int TYPE_BADLOG_WITHKEY=2;  //装配车间
     public static final int TYPE_BADLOG_EMPTY=-1;
@@ -100,16 +97,15 @@ public class Constants {
     //当点击Button或提交时传递该Tag事件
     public static final String CHAT_EVENT="chat_event";
     public static final String PUSH_EVENT="push_event";
-    public static String getFurjaLoginUrl()
-    {
+
+    public static String getFurjaLoginUrl() {
         if(isInnerNet)
             return InneURL.FURJA_LOGIN_URL;
         else
             return FURJA_LOGIN_URL;
     }
 
-    public static String getFjBadtypetotalWorkplaceUrl()
-    {
+    public static String getFjBadtypetotalWorkplaceUrl() {
         if(isInnerNet)
             return InneURL.FJ_BADTYPETOTAL_WORKPLACE;
         else
@@ -123,13 +119,6 @@ public class Constants {
             return FURJA_RELEASE_URL;
     }
 
-    public static String getFurjaSCDHINFO() {
-        if(isInnerNet)
-            return InneURL.FURJA_SCDHINFO_URL;
-        else
-            return FURJA_SCDHINFO_URL;
-    }
-
     public static String getFurjaBarCodeINFO() {
         if(isInnerNet)
             return InneURL.FURIA_RELEASE_URL;
@@ -139,20 +128,31 @@ public class Constants {
     @NonNull
     public static String getBaseUrl() {
         String url="";
-//        if(NetworkChangeReceiver.isInnerNet())
-        url= FURJA_INNER_URL;
-//        else
-//            url= FURJA_OUTER_URL;
+        if(NetworkChangeReceiver.isInnerNet())
+            url= FURJA_INNER_URL;
+        else
+            url= FURJA_OUTER_URL;
+        return url;
+    }
+
+    @NonNull
+    public static String getCloudUrl() {
+        String url="";
+        if(NetworkChangeReceiver.isInnerNet())
+            url= FURJA_CLOUDINNER_URL;
+        else
+            url= FURJA_CLOUDOUTER_URL;
         return url;
     }
 
     @NonNull
     public static String getHttpsUrl() {
         String url="";
-//        if(NetworkChangeReceiver.isInnerNet())
-        url= HTTPS_INNER_URL;
-//        else
-//            url= HTTPS_OUTER_URL;
+        if(NetworkChangeReceiver.isInnerNet())
+            url= HTTPS_INNER_URL;
+        else
+            url= HTTPS_OUTER_URL;
+        url=HTTPS_INNER_URL;
         return url;
     }
 

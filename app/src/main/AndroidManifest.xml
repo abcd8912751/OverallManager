@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.furja.overall">
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -54,41 +53,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.furja.devicemanager.ui.DevManageActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden"
-            android:label="@string/deviceManager_name"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-
-        <receiver android:name="com.furja.devicemanager.services.AlarmReceiver">
-            <intent-filter>
-                <action android:name="com.furja.devicemanager.services.ALARM" />
-                <action android:name="com.furja.devicemanager.services.CANCEL" />
-                <action android:name="com.furja.devicemanager.services.NOTIFY" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name="com.furja.devicemanager.services.AppPushService" />
-        <service android:name=".services.ChatService" />
-
-        <activity
-            android:name="com.furja.devicemanager.ui.PISpotCheckActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/label_zhusu_Description"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.ChatActivity" />
-        <activity
-            android:name="com.furja.devicemanager.ui.own.OwnRecordActivity"
-            android:label="@string/deviceManager_name" />
-        <activity
-            android:name="com.furja.devicemanager.ui.ProjectRecordActivity"
-            android:label="@string/item_maintain" />
-        <activity
-            android:name="com.furja.devicemanager.ui.plan.PlanListActivity"
-            android:label="@string/label_plan"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.furja.verify.ui.JYProductVerifyActivity"
             android:configChanges="orientation|keyboard|keyboardHidden"
             android:label="@string/label_jyProductVerify"
@@ -125,11 +89,10 @@
             android:label="@string/label_qmaGroup" />
         <activity
             android:name="com.furja.iqc.ui.InspectItemDetailActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden"
-            android:parentActivityName=".ui.MasterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name="com.furja.alertsop.ui.SopActivity"
+            android:name="com.furja.iqc.ui.SopActivity"
             android:configChanges="orientation|keyboard|keyboardHidden"
             android:label="@string/text_sopOnline"
             android:parentActivityName=".ui.MasterActivity" />
@@ -146,6 +109,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <receiver android:name="com.furja.utils.TextInputListener">
+            <intent-filter>
+                <action android:name="com.barcode.sendBroadcast" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

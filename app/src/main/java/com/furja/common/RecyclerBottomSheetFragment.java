@@ -167,7 +167,7 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
             int index=helper.getAdapterPosition()+1;
             helper.setText(R.id.item_content,index+": "+checkOrder.getProjectName());
             TextView textView=helper.getView(R.id.item_type);
-            if(!checkOrder.hasCheck()){
+            if(!checkOrder.hasCheck()||!checkOrder.isViewed()){
                 textView.setText("未检");
                 textView.setBackgroundResource(R.drawable.shape_notinspect_bg);
             }
@@ -205,4 +205,6 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
     public void setClickCallBack(JustCallBack clickCallBack) {
         this.clickCallBack = clickCallBack;
     }
+
+
 }

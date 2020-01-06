@@ -39,7 +39,7 @@ public class TextChanger implements TextWatcher {
             try {
                 int value=Integer.valueOf(string);
                 return value;
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 return 0;
             }
         }
@@ -52,7 +52,7 @@ public class TextChanger implements TextWatcher {
             try {
                 double value=Double.valueOf(string);
                 return value;
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 return 0;
             }
         }

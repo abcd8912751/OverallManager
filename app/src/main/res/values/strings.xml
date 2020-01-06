@@ -275,4 +275,6 @@
     <string name="text_progress1">已收料</string>
     <string name="text_progress2">已检验</string>
     <string name="text_progress3">已退料</string>
+    <string name="text_hide">隐藏</string>
+    <string name="text_continue">继续检验</string>
 </resources>

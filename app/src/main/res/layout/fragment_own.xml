@@ -6,9 +6,9 @@
     android:layout_height="match_parent">
     <ImageView
         android:id="@+id/image_avator"
-        android:layout_width="@dimen/dp_100"
-        android:layout_height="@dimen/dp_100"
-        app:srcCompat="@mipmap/ic_avator"
+        android:layout_width="@dimen/dp_96"
+        android:layout_height="@dimen/dp_96"
+        app:srcCompat="@mipmap/ic_avator_male"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/recycler_preference"

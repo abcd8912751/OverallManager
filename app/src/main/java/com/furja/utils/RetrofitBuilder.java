@@ -32,10 +32,7 @@ public class RetrofitBuilder {
 
     public static <T> T getHelperByUrl(String baseUrl,Class<T> tClass) {
         builder= RetrofitHolder.retrofitBuilder;
-        Retrofit retrofit
-                = builder
-                .baseUrl(baseUrl)
-                .build();
+        Retrofit retrofit = builder.baseUrl(baseUrl).build();
         return retrofit.create(tClass);
     }
 
@@ -44,8 +41,7 @@ public class RetrofitBuilder {
     }
 
     private static class  RetrofitHolder {
-        static Builder retrofitBuilder
-                =getRetrofitBuilder();
+        static Builder retrofitBuilder =getRetrofitBuilder();
         private static Builder getRetrofitBuilder() {
             HttpsUtils.SSLParams sslParams
                     = HttpsUtils.getSslSocketFactory(null, null, null);

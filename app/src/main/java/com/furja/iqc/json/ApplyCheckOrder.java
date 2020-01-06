@@ -62,6 +62,8 @@ public class ApplyCheckOrder {
     private boolean isqualified;    //是否合格
     @JSONField(serialize = false)
     private boolean FKeyInspect;    //是否重点检查,当该值为否时自动生成
+    @JSONField(serialize = false)
+    private boolean viewed;
     private int FSampleQty1;
     private int FAcceptQty1;
     private int FRejectQty1;
@@ -217,6 +219,14 @@ public class ApplyCheckOrder {
 
     public void setFInspectInstrumentId(FNumberBean FInspectInstrumentId) {
         this.FInspectInstrumentId = FInspectInstrumentId;
+    }
+
+    public boolean isViewed() {
+        return viewed;
+    }
+
+    public void setViewed(boolean viewed) {
+        this.viewed = viewed;
     }
 
     public void setfNOReason1(String fNOReason1) {
@@ -576,6 +586,11 @@ public class ApplyCheckOrder {
         if(dataBean.getAnalysisWay().contains("定性"))
             return true;
         else {
+            double targetValQ = doubleOf(dataBean.getTargetValue());
+            double upLimitQ = doubleOf(dataBean.getUpperSpec());
+            double downLimitQ=doubleOf(dataBean.getLowerSpec());
+            if(targetValQ==0&&upLimitQ==0&&downLimitQ==0)
+                return true;
             if(isZero(fcheckvalue1)&&isZero(fcheckvalue2)
                     &&isZero(fcheckvalue3)&&isZero(fcheckvalue4)
                     &&isZero(fcheckvalue5)&&isZero(fcheckvalue6))

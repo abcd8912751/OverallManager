@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class OwnFragment extends BaseFragment {
     RecyclerView recyclerView;
     TextView textView;
     AppCompatSpinner spinnerOrg;
+    ImageView imageAvator;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ownViewModel=ViewModelProviders.of(this).get(OwnViewModel.class);
@@ -54,6 +56,7 @@ public class OwnFragment extends BaseFragment {
         recyclerView.setLayoutManager(WrapLinearLayoutManager.wrap(mContext));
         textView=root.findViewById(R.id.text_userName);
         spinnerOrg=root.findViewById(R.id.spinner_org);
+        imageAvator=root.findViewById(R.id.image_avator);
         initView();
         return root;
     }
@@ -61,7 +64,6 @@ public class OwnFragment extends BaseFragment {
     /**
      * 初始化视图
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initView() {
         PreferenceItem item=new PreferenceItem("检查更新");
         PreferenceItem item1=new PreferenceItem("切换账号");
@@ -84,11 +86,10 @@ public class OwnFragment extends BaseFragment {
                     getActivity().finish();
                     break;
                 case "关于软件":
+                    String verName="版本: "+new AutoUpdateUtils(mContext).getVerName();
                     MaterialDialog dialog=new MaterialDialog.Builder(mContext)
-                            .title("软件介绍")
-                            .positiveText("了解")
-                            .content("富佳移动云集成,当前版本:1.0")
-                            .show();
+                            .title("软件介绍").positiveText("了解")
+                            .content(verName) .show();
                     dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape_dialog_bg);
                     break;
             }
@@ -118,6 +119,10 @@ public class OwnFragment extends BaseFragment {
                 }
             });
             spinnerOrg.setVisibility(View.VISIBLE);
+            CloudUserWithOrg userWithOrg = userData.get(0);//获取性别
+            if("1".equals(userWithOrg.getFNote()))
+                imageAvator.setImageResource(R.mipmap.ic_avator_female);
+
         }
         recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER); //设定边界无波纹动画
     }

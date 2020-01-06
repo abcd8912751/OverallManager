@@ -16,7 +16,13 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -338,9 +344,30 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * 配置WebView,使其可直接打开网页并使用JS
+     * @param webView
+     */
+    public static void initWebView(WebView webView){
+        if(webView==null)
+            return;
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+        webView.setBackgroundColor(0);
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setDatabaseEnabled(true);
+        settings.setAppCacheEnabled(true);
+        settings.setAllowFileAccess(true);
+    }
 
     /**
      * 禁用输入法即只允许条码扫码
@@ -456,7 +483,6 @@ public class Utils {
                         .setContentText(text)
                         .setAutoCancel(false)
                         .setTicker(info+":"+title)
-//                        .setDefaults( Notification.DEFAULT_ALL)
                         .setContentInfo(info);
         NotificationCompat.BigTextStyle bigTextStyle
                 =new NotificationCompat.BigTextStyle();
@@ -513,23 +539,10 @@ public class Utils {
      * @param n
      * @return
      */
-    public static int getRandomInt(int n)
-    {
+    public static int getRandomInt(int n) {
         if(n<= 0)
             return 0;
         return random.nextInt(n);
-    }
-
-
-
-    /**
-     * 获取 源字符串 去除尾部4位后 的字符串
-     * @param string
-     * @return
-     */
-    @NonNull
-    public static String getSubstring(String string) {
-        return string.substring(0,string.length()-4);
     }
 
 
@@ -546,6 +559,15 @@ public class Utils {
         }
     }
 
+    /**
+     * 判断List是否为空
+     * @param list
+     * @return
+     */
+    public static boolean isEmpty(List list){
+        return list==null||list.isEmpty();
+    }
+
     public static  <T> int intOf(T str){
         return (int) doubleOf(str);
     }
@@ -556,5 +578,11 @@ public class Utils {
                 .create(okhttp3.MediaType.parse("application/json;charset=utf-8"),json);
     }
 
-
+    public static int getScreenWidth() {
+        WindowManager wm = (WindowManager) FurjaApp.getContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels; //横屏时使用高度
+    }
 }

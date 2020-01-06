@@ -3,8 +3,8 @@ package com.furja.utils;
 
 
 import com.furja.common.BaseHttpResponse;
-import com.furja.alertsop.beans.ProduceNoAndModel;
-import com.furja.alertsop.jsonbeans.MaterialJson;
+import com.furja.common.ProduceNoAndModel;
+import com.furja.common.MaterialJson;
 import com.furja.iqc.beans.CheckCBList;
 import com.furja.iqc.json.NewQCList;
 import com.furja.iqc.json.QMAGroupBean;

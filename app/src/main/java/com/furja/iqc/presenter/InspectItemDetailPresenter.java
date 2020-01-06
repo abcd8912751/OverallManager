@@ -6,8 +6,11 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.NumberKeyListener;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -33,6 +36,7 @@ import butterknife.OnClick;
 import static com.furja.utils.Utils.doubleOf;
 import static com.furja.utils.Utils.intOf;
 import static com.furja.utils.Utils.showLog;
+import static com.furja.utils.Utils.showLongToast;
 import static com.furja.utils.Utils.showToast;
 import static com.furja.utils.Utils.textOf;
 
@@ -85,7 +89,7 @@ public class InspectItemDetailPresenter {
     ProjectDetailView detailView;
     NumberKeyListener numberKeyListener;
     boolean hasSixValue=false;  //是否有6个检测值
-    public InspectItemDetailPresenter(View view, ProjectDetailView view1) {
+    public InspectItemDetailPresenter(View view, ProjectDetailView contractView) {
         ButterKnife.bind(this,view);
         setEditChangeListener(editText1);
         setEditChangeListener(editText2);
@@ -111,7 +115,21 @@ public class InspectItemDetailPresenter {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        this.detailView=view1;
+        TextView.OnEditorActionListener actionListener=new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE){
+                    if(getItem(currentPosition).hasCheck()){
+                        hideSoftInput();
+                        navToNext();
+                    }
+                }
+                return false;
+            }
+        };
+        editText5.setOnEditorActionListener(actionListener);
+        editText6.setOnEditorActionListener(actionListener);
+        this.detailView=contractView;
     }
 
 
@@ -147,13 +165,12 @@ public class InspectItemDetailPresenter {
                     else if(intOf(text)==0)
                         editText.setTextColor(Color.BLACK);
                         else
-                        editText.setTextColor(Color.RED);
+                            editText.setTextColor(Color.RED);
                     title_result.setTextColor(Color.MAGENTA);
                     title_result.setText("检验结果: 不合格");
                 }
             }
         });
-
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -163,12 +180,9 @@ public class InspectItemDetailPresenter {
                     text=charSequence.toString();
                 if(!hasFocus)
                     valueItemByEditText(editText.getId(),text);
-                else
-                    showLog("找到:"+text);
-                    editText.selectAll();
+                editText.selectAll();
             }
         });
-
         editText.setKeyListener(new NumberKeyListener() {
             @NonNull
             @Override
@@ -193,7 +207,6 @@ public class InspectItemDetailPresenter {
                 return 3;
             }
         });
-
         editText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -306,12 +319,10 @@ public class InspectItemDetailPresenter {
     public void navToNext() {
         if(currentPosition==getItemCount()-1)
             return;
-        if (!getItem(currentPosition).hasCheck())
-            showToast("当前项目尚未检验,请核查");
-        else {
-            setPositionAndValue(currentPosition + 1);
-            generateSpinnerItems(currentPosition);
-        }
+        if(!getItem(currentPosition).isQualified(hasSixValue))
+            showLongToast("上一个检验项目不合格,请核查");
+        setPositionAndValue(currentPosition + 1);
+        generateSpinnerItems(currentPosition);
     }
 
     public void navToPrev() {
@@ -464,12 +475,16 @@ public class InspectItemDetailPresenter {
         }
         this.currentPosition = selectedPosition;
         ApplyCheckOrder item =mDatas.get(selectedPosition);
+        if(!item.isViewed()){
+            item.setViewed(true);
+            mDatas.set(selectedPosition,item);
+        }
         NewQCList.QCEntryDataBean dataBean =item.getDataBean();
         if(dataBean.getAnalysisWay().contains("定性")) {
             btnRandom.setVisibility(View.INVISIBLE);
             valueEditWithItem(item);
         }
-        else if(!item.isFKeyInspect()){
+        else if(!item.isFKeyInspect()||hasSixValue()){
             btnRandom.setVisibility(View.VISIBLE);
             performRandom();
         }
@@ -614,6 +629,12 @@ public class InspectItemDetailPresenter {
 
     public void setHasSixValue(boolean hasSixValue) {
         this.hasSixValue = hasSixValue;
+    }
+
+    public void hideSoftInput() {
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm!=null&&imm.isActive())
+            imm.hideSoftInputFromWindow(editText1.getWindowToken(), 0);
     }
 
     public interface ProjectDetailView {

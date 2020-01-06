@@ -45,6 +45,7 @@ import static com.furja.utils.Constants.EXTRA_QCDATA_BEAN;
 import static com.furja.utils.Constants.EXTRA_QCENTRY_DATA;
 import static com.furja.utils.Constants.EXTRA_QCLIST_DATA;
 import static com.furja.utils.Constants.EXTRA_QCVALUE_DATA;
+import static com.furja.utils.Constants.getCloudUrl;
 import static com.furja.utils.Utils.showLog;
 
 /**
@@ -73,8 +74,8 @@ public class InspectIncomingActivity extends BaseActivity implements IncomingVer
         recyclerView.setLayoutManager(WrapLinearLayoutManager.wrap(this));
         recyclerView.setAdapter(lineItemAdapter);
         lineItemAdapter.bindToRecyclerView(recyclerView);
-        presenter =new IncomingVerifyPresenter(this);
-        View.OnClickListener listener =v->{ toLogProject();  };
+        presenter =new IncomingVerifyPresenter(this,this);
+        View.OnClickListener listener = v->{ toLogProject();  };
         confirmButton.setOnClickListener(listener);
         qcscheme_info.setMovementMethod(ScrollingMovementMethod.getInstance());
         DividerItemDecoration itemDecoration
@@ -108,7 +109,7 @@ public class InspectIncomingActivity extends BaseActivity implements IncomingVer
     private void initWebView() {
         emptyWebView =View.inflate(this,R.layout.layout_websurf,null);
         LinearLayout linearLayout= emptyWebView.findViewById(R.id.linear_layout);
-        String url="http://192.168.9.4:3532/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
+        String url=getCloudUrl()+"/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
         String userName = FurjaApp.getUserName();
         url = url +userName;
         agentWeb = AgentWeb.with(this)
