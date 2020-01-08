@@ -21,10 +21,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
 import com.furja.presenter.SopOnlinePresenter;
+import com.furja.utils.SharpBus;
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 import static android.view.KeyEvent.KEYCODE_F7;
+import static com.furja.utils.Constants.TAG_CLOSE_DIALOG;
 import static com.furja.utils.Constants.getCloudUrl;
 import static com.furja.utils.Utils.getScreenWidth;
 import static com.furja.utils.Utils.initWebView;
@@ -54,6 +63,7 @@ public class LinearDialogFragment extends DialogFragment {
                     this.layoutID=R.layout.layout_lineardialog_web;
                     break;
         }
+
     }
 
 
@@ -73,11 +83,11 @@ public class LinearDialogFragment extends DialogFragment {
                     int offsetX=getScreenWidth()/4;
                     switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            lastX = motionEvent.getX();
+                            lastX = motionEvent.getRawX();
                             break;
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
-                            float currX = motionEvent.getX();
+                            float currX = motionEvent.getRawX();
                             if(currX-lastX>offsetX&&dialogType==DIALOG_SOP_ONLINE){
                                 dismiss();
                                 return true;
@@ -111,7 +121,7 @@ public class LinearDialogFragment extends DialogFragment {
                 sopPresenter=new SopOnlinePresenter(rootView,this);
                 rootView.setOnTouchListener(touchListener);
             }
-            hideText.setOnClickListener(v -> {
+            hideText.setOnClickListener(v->{
                 dismiss();
             });
         }
@@ -121,30 +131,33 @@ public class LinearDialogFragment extends DialogFragment {
                 viewGroup.removeView(rootView);
         }
         if(dialogType==DIALOG_QCDISPATCH_WEB)
-            dialog.getWindow().
-                    getAttributes().windowAnimations = R.style.AnimHorizontal;
+            dialog.getWindow().getAttributes().windowAnimations = R.style.AnimHorizontal;
         else{
-            dialog.getWindow().
-                    getAttributes().windowAnimations=R.style.SopDialogFragment;
+            dialog.getWindow().getAttributes().windowAnimations=R.style.SopDialogFragment;
             dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                 @Override
                 public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                    if(event!=null&&event.getAction()==KeyEvent.ACTION_DOWN) {
-                        if(keyCode == KeyEvent.KEYCODE_BRIGHTNESS_DOWN
-                                || keyCode == KeyEvent.KEYCODE_BRIGHTNESS_UP
-                                || keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                                || keyCode == KEYCODE_F7) {
-                            if(sopPresenter!=null)
-                                sopPresenter.focusBarcodeInput();
-                            return true;
-                        }
+                    showLog(event.toString());
+                    if(keyCode == KeyEvent.KEYCODE_BRIGHTNESS_DOWN
+                            || keyCode == KeyEvent.KEYCODE_BRIGHTNESS_UP
+                            || keyCode == KEYCODE_F7) {
+                        if(sopPresenter!=null)
+                            sopPresenter.focusBarcodeInput();
+                        return true;
                     }
                     return false;
                 }
             });
+            if(sopPresenter!=null)
+                sopPresenter.listenSharpBus(this);
+            SharpBus.getInstance().register(TAG_CLOSE_DIALOG,this)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .as(AutoDispose.<Object>autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+                    .subscribe(event->{
+                        dismiss();
+                    });
         }
         dialog.setContentView(rootView);
-
     }
 
 

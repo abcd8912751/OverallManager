@@ -49,7 +49,7 @@ public class ApplyCheckOrder {
     @JSONField(serialize = false)
     private String fNOnumber3;
     @JSONField(serialize = false)
-    private String fcheckRES;
+    private boolean hasSixValue;
     @JSONField(serialize = false)
     private double applyQty;        // 请检数量
     @JSONField(serialize = false)
@@ -88,15 +88,6 @@ public class ApplyCheckOrder {
 
     public ApplyCheckOrder(NewQCList.QCEntryDataBean dataBean, int position) {
         setDataBean(dataBean);
-        this.fcheckvalue1="0.00";
-        setFcheckvalue2(fcheckvalue1);
-        setFcheckvalue3(fcheckvalue1);
-        setFcheckvalue4(fcheckvalue1);
-        setFcheckvalue5(fcheckvalue1);
-        setFcheckvalue6(fcheckvalue1);
-        fNOnumber3=fNOnumber2=fNOnumber1="0";
-        fNOReason3=fNOReason2=fNOReason1="0";
-        this.fcheckRES="合格";
         this.position=position;
         FValueGrid=new ArrayList<>();
     }
@@ -144,9 +135,17 @@ public class ApplyCheckOrder {
         this.FDownOffsetQ=dataBean.getFDownOffsetQ();
     }
 
+    public boolean isHasSixValue() {
+        return hasSixValue;
+    }
+
+    public void setHasSixValue(boolean hasSixValue) {
+        this.hasSixValue = hasSixValue;
+    }
+
     private void addValueItemByValueQ(String inspectValueQ) {
         double value = doubleOf(inspectValueQ);
-        if(value>0)
+        if(value!=0)
             FValueGrid.add(new InspectValueItem(value));
     }
     @JSONField(serialize = false)
@@ -273,14 +272,6 @@ public class ApplyCheckOrder {
         this.fNOnumber3 = fNOnumber3;
     }
 
-    public String getFcheckRES() {
-        return fcheckRES;
-    }
-
-    public void setFcheckRES(String fcheckRES) {
-        this.fcheckRES = fcheckRES;
-    }
-
     public double getApplyQty() {
         return applyQty;
     }
@@ -307,7 +298,7 @@ public class ApplyCheckOrder {
 
     public String getFcheckvalue1() {
         if(TextUtils.isEmpty(fcheckvalue1))
-            fcheckvalue1="0.00";
+            fcheckvalue1="";
         return fcheckvalue1;
     }
 
@@ -317,7 +308,7 @@ public class ApplyCheckOrder {
 
     public String getFcheckvalue2() {
         if(TextUtils.isEmpty(fcheckvalue2))
-            fcheckvalue2="0.00";
+            fcheckvalue2="";
         return fcheckvalue2;
     }
 
@@ -327,7 +318,7 @@ public class ApplyCheckOrder {
 
     public String getFcheckvalue3() {
         if(TextUtils.isEmpty(fcheckvalue3))
-            fcheckvalue3="0.00";
+            fcheckvalue3="";
         return fcheckvalue3;
     }
 
@@ -337,7 +328,7 @@ public class ApplyCheckOrder {
 
     public String getFcheckvalue4() {
         if(TextUtils.isEmpty(fcheckvalue4))
-            fcheckvalue4="0.00";
+            fcheckvalue4="";
         return fcheckvalue4;
     }
 
@@ -411,7 +402,7 @@ public class ApplyCheckOrder {
 
     public String getFcheckvalue5() {
         if(TextUtils.isEmpty(fcheckvalue5))
-            fcheckvalue5="0.00";
+            fcheckvalue5="";
         return fcheckvalue5;
     }
 
@@ -421,7 +412,7 @@ public class ApplyCheckOrder {
 
     public String getFcheckvalue6() {
         if(TextUtils.isEmpty(fcheckvalue6))
-            fcheckvalue6="0.00";
+            fcheckvalue6="";
         return fcheckvalue6;
     }
 
@@ -476,7 +467,7 @@ public class ApplyCheckOrder {
 
     public String getFNOReason1() {
         if(TextUtils.isEmpty(fNOReason1))
-            fNOReason1="0";
+            fNOReason1="";
         return fNOReason1;
     }
 
@@ -488,7 +479,7 @@ public class ApplyCheckOrder {
 
     public String getFNOnumber1() {
         if(TextUtils.isEmpty(fNOnumber1))
-            fNOnumber1="0";
+            fNOnumber1="";
         return this.fNOnumber1;
     }
 
@@ -500,7 +491,7 @@ public class ApplyCheckOrder {
 
     public String getFNOReason2() {
         if(TextUtils.isEmpty(fNOReason2))
-            fNOReason2="0";
+            fNOReason2="";
         return fNOReason2;
     }
 
@@ -512,7 +503,7 @@ public class ApplyCheckOrder {
 
     public String getFNOnumber2() {
         if(TextUtils.isEmpty(fNOnumber2))
-            fNOnumber2="0";
+            fNOnumber2="";
         return fNOnumber2;
     }
 
@@ -524,19 +515,17 @@ public class ApplyCheckOrder {
 
     public String getFNOReason3() {
         if(TextUtils.isEmpty(fNOReason3))
-            fNOReason3="0";
+            fNOReason3="";
         return this.fNOReason3;
     }
-
 
     public void setFNOReason3(String fNOReason3) {
         this.fNOReason3 = fNOReason3;
     }
 
-
     public String getFNOnumber3() {
         if(TextUtils.isEmpty(fNOnumber3))
-            fNOnumber3="0";
+            fNOnumber3="";
         return fNOnumber3;
     }
 
@@ -572,11 +561,6 @@ public class ApplyCheckOrder {
         return res;
     }
 
-    public double getDoubleOfString(String value) {
-        if(TextUtils.isEmpty(value))
-            return 0.00;
-        return Double.valueOf(value);
-    }
 
     /**
      * 该条目是否检验,默认是全0
@@ -591,10 +575,12 @@ public class ApplyCheckOrder {
             double downLimitQ=doubleOf(dataBean.getLowerSpec());
             if(targetValQ==0&&upLimitQ==0&&downLimitQ==0)
                 return true;
-            if(isZero(fcheckvalue1)&&isZero(fcheckvalue2)
-                    &&isZero(fcheckvalue3)&&isZero(fcheckvalue4)
-                    &&isZero(fcheckvalue5)&&isZero(fcheckvalue6))
+            if(TextUtils.isEmpty(fcheckvalue1)||TextUtils.isEmpty(fcheckvalue2)
+                    ||TextUtils.isEmpty(fcheckvalue3)||TextUtils.isEmpty(fcheckvalue4)
+                    ||TextUtils.isEmpty(fcheckvalue5))
                 return false;
+            else if(hasSixValue)
+                return !TextUtils.isEmpty(fcheckvalue6);
             else
                 return true;
         }

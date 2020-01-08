@@ -72,6 +72,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.SplashActivity" />
         <activity android:name=".ui.WebSurfActivity"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboard|keyboardHidden"/>
         <activity
             android:name="com.furja.fixturemanager.ui.WorkFixActivity"
@@ -81,11 +82,13 @@
             android:name="com.furja.iqc.ui.InspectIncomingActivity"
             android:label="@string/text_ipqc"
             android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboard|keyboardHidden"
             android:parentActivityName=".ui.MasterActivity" />
         <activity
             android:name="com.furja.iqc.ui.QMAGroupActivity"
             android:configChanges="orientation|keyboard|keyboardHidden"
+            android:screenOrientation="portrait"
             android:label="@string/label_qmaGroup" />
         <activity
             android:name="com.furja.iqc.ui.InspectItemDetailActivity"
@@ -93,6 +96,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name="com.furja.iqc.ui.SopActivity"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboard|keyboardHidden"
             android:label="@string/text_sopOnline"
             android:parentActivityName=".ui.MasterActivity" />
@@ -114,6 +118,9 @@
                 <action android:name="com.barcode.sendBroadcast" />
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="com.furja.utils.GlideConfigModule"
+            android:value="GlideModule" />
     </application>
 
 </manifest>

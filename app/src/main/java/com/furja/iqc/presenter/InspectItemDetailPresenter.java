@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import com.furja.overall.R;
 import com.furja.iqc.json.ApplyCheckOrder;
@@ -80,6 +82,8 @@ public class InspectItemDetailPresenter {
     TextView label6_item;
     @BindView(R.id.label_title)
     TextView title_result;
+    @BindView(R.id.card_projectInfo)
+    CardView cardView;
     int currentPosition=0;
     private List<ApplyCheckOrder> mDatas;
     Random random;
@@ -144,42 +148,44 @@ public class InspectItemDetailPresenter {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                String text="0.00";
+                String text="";
                 if(s!=null)
                     text=s.toString();
                 valueItemByEditText(editText.getId(),text);
                 ApplyCheckOrder item = mDatas.get(currentPosition);
+                String analysisWay = item.getDataBean().getAnalysisWay();
                 if(item.isQualified(hasSixValue)) {
                     editText.setTextColor(Color.BLACK);
                     title_result.setTextColor(Color.WHITE);
                     title_result.setText("检验结果: 合格");
+                    projectInfo.setBackgroundResource(R.color.transparent);
                 }
                 else {
-                    if(item.getDataBean().
-                            getAnalysisWay().contains("定量")){
+                    if(analysisWay.contains("定量")){
                         if(!item.isFit(text))
                             editText.setTextColor(Color.RED);
                         else
                             editText.setTextColor(Color.BLACK);
                     }
                     else if(intOf(text)==0)
-                        editText.setTextColor(Color.BLACK);
+                            editText.setTextColor(Color.BLACK);
                         else
                             editText.setTextColor(Color.RED);
                     title_result.setTextColor(Color.MAGENTA);
                     title_result.setText("检验结果: 不合格");
+                    projectInfo.setBackgroundResource(R.drawable.shape_unqualified_layout);
                 }
             }
         });
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                String text="0.00";
+                String text="";
                 CharSequence charSequence=editText.getText();
                 if(!TextUtils.isEmpty(charSequence))
-                    text=charSequence.toString();
-                if(!hasFocus)
-                    valueItemByEditText(editText.getId(),text);
+                    text = charSequence.toString();
+                if (!hasFocus)
+                    valueItemByEditText(editText.getId(), text);
                 editText.selectAll();
             }
         });
@@ -248,17 +254,10 @@ public class InspectItemDetailPresenter {
     public synchronized void valueItemByEditText(int viewID,String text) {
         ApplyCheckOrder item
                 =mDatas.get(currentPosition);
-        final NewQCList.QCEntryDataBean dataBean
+        NewQCList.QCEntryDataBean dataBean
                 =item.getDataBean();
-        boolean isQualitative=false;    //定量分析
-        if(dataBean .getAnalysisWay().contains("定性"))
-            isQualitative   =true;
-        if(TextUtils.isEmpty(text)) {
-            if(!isQualitative)
-                text="0.00";
-            else
-                text="0";
-        }
+        String analysisWay=dataBean.getAnalysisWay();
+        boolean isQualitative = analysisWay.contains("定性");
         switch (viewID) {
             case    R.id.item_edit1:
                 if(!isQualitative)
@@ -340,10 +339,8 @@ public class InspectItemDetailPresenter {
         String projectName=dataBean.getQcProject();
         double upperSpec
                 =doubleOf(dataBean.getUpperSpec()),
-                lowerSpec
-                        =doubleOf(dataBean.getLowerSpec()),
-                targetValue
-                        =doubleOf(dataBean.getTargetValue());
+                lowerSpec=doubleOf(dataBean.getLowerSpec()),
+                targetValue=doubleOf(dataBean.getTargetValue());
         alterDecimalFormat(projectName);
         String checkValue =getRandomDouble(lowerSpec,targetValue,upperSpec,projectName);
         item.setFcheckvalue1(checkValue);
@@ -491,6 +488,7 @@ public class InspectItemDetailPresenter {
         else {
             btnRandom.setVisibility(View.INVISIBLE);
             valueEditWithItem(item);
+            editText1.requestFocus();
         }
         if(selectedPosition==itemCount-1)
             btn_next.setVisibility(View.INVISIBLE);
@@ -508,8 +506,7 @@ public class InspectItemDetailPresenter {
      * @return
      */
     private ApplyCheckOrder getItem(int position) {
-        if(mDatas==null
-                ||position>=mDatas.size())
+        if(mDatas==null||position>=mDatas.size())
             return null;
         else
             return mDatas.get(position);
@@ -524,8 +521,8 @@ public class InspectItemDetailPresenter {
         try {
             NewQCList.QCEntryDataBean dataBean
                     =item.getDataBean();
-            if(dataBean.getAnalysisWay()
-                    .contains("定性")) {
+            String analysisWay = dataBean.getAnalysisWay();
+            if(analysisWay.contains("定性")) {
                 label1_item.setText("不良原因1");
                 label2_item.setText("不良数1");
                 label3_item.setText("不良原因2");

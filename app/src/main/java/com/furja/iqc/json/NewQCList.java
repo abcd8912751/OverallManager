@@ -372,9 +372,9 @@ public class NewQCList implements Parcelable {
         public String toString() {
             String lineSeparator= System.getProperty("line.separator", "\n");
             return
-                    "     检验方案:      " + qcScheme + lineSeparator +
-                            "       供应商:        " + supplyName +lineSeparator +
-                            "     物料名称:      " + materialName ;
+                    "    检验方案:      " + qcScheme + lineSeparator +
+                            "    供应商:       " + supplyName +lineSeparator +
+                            "    物料名称:   " + materialName ;
         }
 
         @Override

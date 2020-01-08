@@ -45,7 +45,7 @@ public class IncomingVerifyPresenter {
     List<NewQCList.QCEntryDataBean> QcEntryDataBeans;   //检验项目
     List<NewQCList.QCDataBean> QcDataBeans;   //检验项目
     String MaterialInfo;    //报检数量,物料代码,最后一次录入
-    List<String> barCodes;      //截去后四位的条码
+    volatile List<String> barCodes;
     NewQCList qcList;
     long lastMillis;
     public IncomingVerifyPresenter(LineVerifyView view, LifecycleOwner lifeOwner) {
@@ -71,18 +71,18 @@ public class IncomingVerifyPresenter {
                             verifyView.showBarCodeEditor();
                         }
                         else {
-                            for(String barCode:barCodes)
-                                if(input.contains(barCode)) {
-                                    verifyView.showBarCodeEditor();
-                                    showToast("该条码已扫描过");
-                                    return;
-                                }
+                            if(barCodes.contains(input)) {
+                                verifyView.showBarCodeEditor();
+                                showToast("该条码已扫描过");
+                                return;
+                            }
                             long currTimeMillis=System.currentTimeMillis();
-                            if(currTimeMillis-lastMillis<500){
+                            if(currTimeMillis-lastMillis < 500){
                                 showToast("你太勤奋了,我跟不上");
                                 verifyView.showBarCodeEditor();
                                 return;
-                            } lastMillis=currTimeMillis;
+                            }
+                            lastMillis=currTimeMillis;
                             String inputBarCodes=input;
                             if(!barCodes.isEmpty())
                                 inputBarCodes=getCommaString("")+","+input;
@@ -129,6 +129,7 @@ public class IncomingVerifyPresenter {
                         verifyView.setEmptyView(R.layout.scan_empty_view);
                     }
                 },error->{
+                    removeErrorBarcode(barCode);
                     error.printStackTrace();
                     postError(error);
                     if(error instanceof JSONException)
@@ -137,20 +138,19 @@ public class IncomingVerifyPresenter {
                         showToast(INTERNET_ABNORMAL);
                     verifyView.setEmptyView(R.layout.offline_empty_view);
                     verifyView.showBarCodeEditor();
-                    removeErrorBarcode(barCode);
                 });
     }
 
     private void removeErrorBarcode(String barCode){
-        String removeItem="";
-        for(String code:barCodes) {
-            if(code.contains(barCode)) {
-                removeItem=code;
-                break;
-            }
+        String[] scanStrings = barCode.split(",");
+        if(scanStrings!=null&&scanStrings.length>0){
+            int length=scanStrings.length;
+            String lastInput=scanStrings[length-1];
+            int index=barCodes.lastIndexOf(lastInput);
+            if(index!=-1)
+                barCodes.remove(index);
+            verifyView.setEmptyView(R.layout.scan_empty_view);
         }
-        barCodes.remove(removeItem);
-        verifyView.setEmptyView(R.layout.scan_empty_view);
     }
 
     /**
@@ -179,7 +179,7 @@ public class IncomingVerifyPresenter {
     public String getBarCodeStr() {
         if(QcDataBeans.isEmpty())
             return "";
-        String barString =System.getProperty("line.separator")+"     请检数量:      ";
+        String barString =System.getProperty("line.separator")+"    请检数量:      ";
         int actReceQty=0;
         for (NewQCList.QCDataBean dataBean:QcDataBeans)
             actReceQty += intOf(dataBean.getApplyQcNum());

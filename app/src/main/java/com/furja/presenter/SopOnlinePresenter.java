@@ -2,7 +2,9 @@ package com.furja.presenter;
 
 import android.accounts.NetworkErrorException;
 import android.content.Context;
+import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -10,12 +12,16 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.furja.common.MaterialInfo;
 import com.furja.common.ProduceNoAndModel;
 import com.furja.common.WrapLinearLayoutManager;
 import com.furja.contract.SopOnlineContract;
 import com.furja.iqc.ui.adapter.SopRecyclerAdapter;
+import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
+import com.furja.utils.GlideApp;
 import com.furja.utils.RetrofitBuilder;
 import com.furja.utils.RetrofitHelper;
 import com.furja.utils.RetryWhenUtils;
@@ -25,17 +31,22 @@ import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import static com.furja.utils.Constants.INTERNET_ABNORMAL;
 import static com.furja.utils.Constants.NODATA_AVAILABLE;
+import static com.furja.utils.Constants.TAG_CLOSE_DIALOG;
 import static com.furja.utils.Constants.TAG_SCAN_BARCODE;
 import static com.furja.utils.Constants.getBaseUrl;
 import static com.furja.utils.Constants.getHttpsUrl;
 import static com.furja.utils.Constants.getVertxUrl;
 import static com.furja.utils.TextInputListener.INPUT_ERROR;
+import static com.furja.utils.Utils.getScreenWidth;
 import static com.furja.utils.Utils.showLog;
 import static com.furja.utils.Utils.showToast;
 
@@ -77,13 +88,41 @@ public class SopOnlinePresenter implements SopOnlineContract.Presenter {
         sopAdapter = new SopRecyclerAdapter(R.layout.recycler_sop_item);
         sopAdapter.bindToRecyclerView(recyclerSop);
         sopAdapter.setEmptyView(R.layout.empty_sop_layout,recyclerSop);
+        sopAdapter.getEmptyView().setOnTouchListener(new View.OnTouchListener() {
+            float lastX;boolean needBack;
+            @Override
+            public boolean onTouch(View v, MotionEvent motionEvent) {
+                int offsetX=getScreenWidth()/4;
+                needBack=false;
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        lastX = motionEvent.getRawX();
+                        showLog("ACTION_DOWN"+lastX);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        showLog("ACTION_UP");
+                        float currX = motionEvent.getRawX();
+                        showLog("ACTION_UP"+currX);
+                        if(currX-lastX>offsetX)
+                            needBack=true;
+                        break;
+                }
+                if(needBack)
+                    Observable.timer(100, TimeUnit.MILLISECONDS)
+                            .subscribe(event->{
+                                SharpBus.getInstance().post(TAG_CLOSE_DIALOG, "close");
+                            });
+                return true;
+            }
+        });
     }
 
     /**
      * 监听SharpBus事件
      * @param lifeOwner
      */
-    private void listenSharpBus(LifecycleOwner lifeOwner) {
+    public void listenSharpBus(LifecycleOwner lifeOwner) {
         sharpBus = SharpBus.getInstance();
         sharpBus.register(TAG_SCAN_BARCODE,this, String.class)
                 .as(AutoDispose.<String>autoDisposable(AndroidLifecycleScopeProvider.from(lifeOwner)))

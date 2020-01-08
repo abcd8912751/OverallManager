@@ -10,6 +10,7 @@
     <color name="white">#FFFFFF</color>
     <color name="holo_circle">#ffcc33cc</color>
     <color name="holo_text">#ff0f82f6</color>
+    <color name="default_textColor">#747474</color>
     <color name="color_dark">#B8ACAC</color>
     <color name="holo_purple">#ff00ff00</color>
     <color name="colorBasic">#f02196f3</color>

@@ -1,9 +1,7 @@
 package com.furja.overall.beans;
 
-
 import java.util.ArrayList;
 import java.util.List;
-
 public class InspectHistoryLog {
     private String FDocumentStatus;
     private String FInspectBillNo;
@@ -23,6 +21,9 @@ public class InspectHistoryLog {
     private String FInspectDate;
     private String FInstockDate;
     private String FMrbDate;
+    private String FReceiveBiller;
+    private String FInstockBiller;
+    private String FMrbBiller;
     private List<InspectHistoryLog> items;
 
     public InspectHistoryLog() {
@@ -103,6 +104,30 @@ public class InspectHistoryLog {
 
     public void setFInstockBillNo(String FInstockBillNo) {
         this.FInstockBillNo = FInstockBillNo;
+    }
+
+    public String getFReceiveBiller() {
+        return FReceiveBiller;
+    }
+
+    public String getFMrbBiller() {
+        return FMrbBiller;
+    }
+
+    public void setFMrbBiller(String FMrbBiller) {
+        this.FMrbBiller = FMrbBiller;
+    }
+
+    public void setFReceiveBiller(String FReceiveBiller) {
+        this.FReceiveBiller = FReceiveBiller;
+    }
+
+    public String getFInstockBiller() {
+        return FInstockBiller;
+    }
+
+    public void setFInstockBiller(String FInstockBiller) {
+        this.FInstockBiller = FInstockBiller;
     }
 
     public String getFMrbBillNo() {

@@ -68,7 +68,7 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
                 recyclerView.addItemDecoration(itemDecoration);
             }
         }
-        RecyclerAdapter adapter=new RecyclerAdapter(layoutID,recyclerData);
+        RecyclerAdapter adapter=new RecyclerAdapter(layoutID, recyclerData);
         adapter.bindToRecyclerView(recyclerView);
         adapter.setOnItemClickListener((adapter1, view, position) -> {
             if(clickCallBack!=null)
@@ -110,7 +110,8 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
          */
         private void convertWith(BaseViewHolder helper, InspectHistoryLog historyLog){
             String lineSeparator = System.getProperty("line.separator");
-            String receiveStr = ""+historyLog.getFReceiveBillno();
+            String receiveStr = "收料员:"+historyLog.getFReceiveBiller()
+                    +lineSeparator+"收料:"+historyLog.getFReceiveBillno();
             receiveStr=receiveStr+lineSeparator;
             receiveStr=receiveStr+"数量:"+historyLog.getFReceiveQty();
             helper.setText(R.id.text_receive,receiveStr);
@@ -132,12 +133,13 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
                     }
                     else {
                         textStock.setTextColor(Color.BLACK);
-                        String stockStr="退料:"+historyLog.getFMrbBillNo()+lineSeparator;
-                        stockStr=stockStr+historyLog.getFMrbDate();
-                        textStock.setText(stockStr);
+                        String mrbStr="退料员:"+historyLog.getFMrbBiller()+lineSeparator;
+                        mrbStr=mrbStr+"退料:"+historyLog.getFMrbBillNo()+lineSeparator;
+                        mrbStr=mrbStr+historyLog.getFMrbDate();
+                        textStock.setText(mrbStr);
                         textInspect.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.ic_right_arrow,0);
                     }
-                }else {
+                } else {
                     if(usePolicy.equals("让步接收"))
                         textInspect.setTextColor(Color.rgb(255,98,1));
                     else
@@ -149,7 +151,8 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
                     }
                     else {
                         textStock.setTextColor(Color.BLACK);
-                        String stockStr="入库:"+historyLog.getFInstockBillNo()+lineSeparator;
+                        String stockStr="入库员:"+historyLog.getFInstockBiller()+lineSeparator;
+                        stockStr=stockStr+"入库:"+historyLog.getFInstockBillNo()+lineSeparator;
                         stockStr=stockStr+historyLog.getFInstockDate();
                         textStock.setText(stockStr);
                         textInspect.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.ic_right_arrow,0);
@@ -168,7 +171,7 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
             helper.setText(R.id.item_content,index+": "+checkOrder.getProjectName());
             TextView textView=helper.getView(R.id.item_type);
             if(!checkOrder.hasCheck()||!checkOrder.isViewed()){
-                textView.setText("未检");
+                textView.setText("未检完");
                 textView.setBackgroundResource(R.drawable.shape_notinspect_bg);
             }
             else if(checkOrder.isQualified(true)) {

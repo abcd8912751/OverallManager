@@ -84,6 +84,7 @@ public class InspectIncomingActivity extends BaseActivity implements IncomingVer
         edit_mainBarCode.requestFocus();
         initWebView();
         TextInputListener.bind(edit_mainBarCode);
+        View view=findViewById(android.R.id.content);
     }
 
 
@@ -157,11 +158,7 @@ public class InspectIncomingActivity extends BaseActivity implements IncomingVer
 
     @Override
     public void setEmptyView(int layoutID) {
-        if(layoutID==R.layout.scan_empty_view) {
-            if(lineItemAdapter.isEmpty())
-                reloadWebView();
-        }
-        else {
+        if(layoutID!=R.layout.scan_empty_view) {
             if(lineItemAdapter.isEmpty())
                 lineItemAdapter.setEmptyView(layoutID, recyclerView);
             showIQCBoard=false;

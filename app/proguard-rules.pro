@@ -46,12 +46,17 @@
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
--keep public class * implements com.bumptech.glide.module.AppGlideModule
--keep public class * implements com.bumptech.glide.module.LibraryGlideModule
+# glide混淆
+#GlideModule路径
+-keepnames class com.furja.utils.GlideConfigModule
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
 }
+-keep class com.bumptech.glide.GeneratedAppGlideModuleImpl { *; }
+-dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
 -keepnames class * implements java.io.Serializable
 -keep public class * implements java.io.Serializable {
    public *;

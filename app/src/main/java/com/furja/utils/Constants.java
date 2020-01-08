@@ -32,6 +32,7 @@ public class Constants {
     public static final String TAG_CANCEL_REQUEST ="当得到Qclist相关信息时取消请求并隐藏对话框";
     public static final String TAG_ERROR_NET ="网络等异常";
     public static final String TAG_ERROR_BARCODE="携带异常条形码信息";
+    public static final String TAG_CLOSE_DIALOG="携带异常条形码信息";
     public static final String TAG_SCAN_BARCODE="条码扫描信息";
     public static final String EXTRA_QCENTRY_DATA ="检验项目信息";
     public static final String EXTRA_QCDATA_BEAN ="请检单信息";

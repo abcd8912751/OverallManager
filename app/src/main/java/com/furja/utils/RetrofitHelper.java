@@ -41,17 +41,11 @@ public interface RetrofitHelper {
     @POST("base/errorlog")
     Observable<ResponseBody> postErrorLog(@Body RequestBody requestBody);
 
-
     @GET("FJCommonInterface/GetBarCodeInfo/")
     Call<com.furja.iqc.json.MaterialJson> getParts(@Query("BarCode") String barCode);
 
-    @FormUrlEncoded
-    @POST("SendQCListByTable")                  //其中 receive 为"让步接收时",进行让步
-    Call<String> postApplyPurchaseOrder(@Field("CodeBar") String barCode, @Field("QCEntryData")String QCEntryData, @Field("FItemId")String userID, @Field("status")String receive);
-
     @GET("IsCheckCBlist")
     Call<CheckCBList> isCheckCBList(@Query("codebar") String barCode, @Query("comparecodebar") String comparecodebar, @Query("cb") String cb);
-
 
     @GET("k3cloud/checkcblist")
     Observable<CheckCBList> checkCBList(@Query("barcode") String barCode, @Query("comparecodebar") String comparecodebar, @Query("cb") String cb);

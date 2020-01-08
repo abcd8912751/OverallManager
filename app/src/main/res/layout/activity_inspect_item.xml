@@ -39,7 +39,6 @@
             android:minLines="6"
             app:layout_constraintTop_toBottomOf="@+id/appBar"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/dp_6"
             />
     </androidx.cardview.widget.CardView>
 

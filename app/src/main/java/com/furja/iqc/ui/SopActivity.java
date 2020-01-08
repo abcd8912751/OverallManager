@@ -29,7 +29,6 @@ public class SopActivity extends BaseActivity {
             int keyCode = event.getKeyCode();
             if(keyCode == KeyEvent.KEYCODE_BRIGHTNESS_DOWN
                     || keyCode == KeyEvent.KEYCODE_BRIGHTNESS_UP
-                    || keyCode == KeyEvent.KEYCODE_VOLUME_UP
                     || keyCode == KEYCODE_F7) {
                 sopOnlinePresenter.focusBarcodeInput();
                 return true;

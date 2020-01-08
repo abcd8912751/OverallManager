@@ -86,7 +86,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
             boolean qualified=true;
             for(ApplyCheckOrder order:orders){
                 if(!order.hasCheck()) {
-                    showToast("存在尚未检验的定量分析项目");
+                    showToast("存在尚未(完整)检验的定量分析项目");
                     detailPresenter.setPositionAndValue(index);
                     detailPresenter.generateSpinnerItems(index);
                     return;
@@ -102,6 +102,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     /**
@@ -110,7 +111,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
     private void showConfirmDialog(boolean qualified) {
         MaterialDialog.Builder builder=new MaterialDialog.Builder(this)
                 .negativeText("取消").positiveText("确认")
-                .title("生成检验单").autoDismiss(false)
+                .title("检验合格,生成检验单").autoDismiss(false)
                 .content("确定数据无误并予以提交?")
                 .onPositive((materialDialog, dialogAction) -> {
                     materialDialog.getActionButton(DialogAction.POSITIVE).setVisibility(View.GONE);
@@ -122,7 +123,7 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                     dialog.cancel();
                 });
         if(!qualified) {
-            builder.neutralText("让步接收").onNeutral((materialDialog, dialogAction)->{
+            builder.title("检验不合格,生成检验单").neutralText("让步接收").onNeutral((materialDialog, dialogAction)->{
                 materialDialog.getActionButton(DialogAction.POSITIVE).setVisibility(View.GONE);
                 materialDialog.getActionButton(DialogAction.NEUTRAL).setVisibility(View.GONE);
                 materialDialog.getActionButton(DialogAction.NEGATIVE).setVisibility(View.GONE);
@@ -294,7 +295,10 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                     List<NewQCList.QCValueBean> valueBeans =qcList.getQCValueData();
                     List<ApplyCheckOrder> orders =new ArrayList<ApplyCheckOrder>();
                     NewQCList.QCDataBean qcDataBean= qcDataBeans.get(0);
+                    if(textOf(qcDataBean.getMaterialName()).contains("电源线"))
+                        detailPresenter.setHasSixValue(true);
                     int i=0,valueSize=valueBeans.size();
+                    boolean hasSixValue = detailPresenter.hasSixValue();
                     for(NewQCList.QCEntryDataBean dataBean:databeans) {
                         ApplyCheckOrder order=new ApplyCheckOrder(dataBean,i);
                         if(i<valueSize&&dataBean.isFKeyInspect())
@@ -306,11 +310,10 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                         order.setFTargetValB(dataBean.getFTargetValB());
                         order.setFInspectInstrumentId(dataBean.getFInspectInstrumentId());
                         order.setFKeyInspect(dataBean.isFKeyInspect());
+                        order.setHasSixValue(hasSixValue);
                         orders.add(order);
                         i++;
                     }
-                    if(textOf(qcDataBean.getMaterialName()).contains("电源线"))
-                        detailPresenter.setHasSixValue(true);
                     return orders;
                 }
             }).subscribeOn(Schedulers.io())
