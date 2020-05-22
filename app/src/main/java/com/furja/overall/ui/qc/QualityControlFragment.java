@@ -64,8 +64,8 @@ public class QualityControlFragment extends BaseFragment {
     }
 
     @OnClick({R.id.card_ipqc,R.id.card_qcboard,R.id.card_sopOnline,R.id.card_inspectHistory})
-    public void onClick(View view){
-        if(FurjaApp.getUser()==null){
+    public void onClick(View view) {
+        if(FurjaApp.getUser() == null){
             switchToLogin();
             return;
         }
@@ -77,11 +77,11 @@ public class QualityControlFragment extends BaseFragment {
                 break;
             case R.id.card_qcboard:
                 intent.setClass(getContext(), WebSurfActivity.class);
-                String iqcUrl=getCloudUrl()+"/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
+                String iqcUrl = getCloudUrl()+"/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
                 String userName = FurjaApp.getUserName();
                 iqcUrl = iqcUrl +userName;
-                intent.putExtra(EXTRA_WEBVIEW_URL,iqcUrl);
-                intent.putExtra(EXTRA_WEBVIEW_TITLE,"派单看板");
+                intent.putExtra(EXTRA_WEBVIEW_URL, iqcUrl);
+                intent.putExtra(EXTRA_WEBVIEW_TITLE, "派单看板");
                 startActivity(intent);
                 break;
             case R.id.card_sopOnline:
@@ -95,7 +95,5 @@ public class QualityControlFragment extends BaseFragment {
                 break;
         }
     }
-
-
 
 }

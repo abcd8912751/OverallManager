@@ -12,7 +12,7 @@ public class InspectBillJSON {
     private String FMaterialNumber;
     private List<ApplyCheckOrder> FItemDetail;
     private String FUsePolicy;
-    private int FInspectQty;
+    private double FInspectQty;
     private List<Qrcode> Qrcode;
     private List<ReferDetail> FReferDetail;
     private String FUnitNumber;
@@ -84,11 +84,11 @@ public class InspectBillJSON {
         this.FSourceOrgNumber = FSourceOrgNumber;
     }
 
-    public int getFInspectQty() {
+    public double getFInspectQty() {
         return FInspectQty;
     }
 
-    public void setFInspectQty(int FInspectQty) {
+    public void setFInspectQty(double FInspectQty) {
         this.FInspectQty = FInspectQty;
     }
 

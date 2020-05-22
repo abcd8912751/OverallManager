@@ -37,7 +37,9 @@ import com.furja.utils.AutoUpdateUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.furja.utils.Utils.isApkInDebug;
 import static com.furja.utils.Utils.showLog;
+import static com.furja.utils.Utils.showToast;
 import static com.furja.utils.Utils.textOf;
 
 public class OwnFragment extends BaseFragment {
@@ -76,7 +78,12 @@ public class OwnFragment extends BaseFragment {
             PreferenceItem item3=adapter.getItem(position);
             switch (item3.getTitle()){
                 case "检查更新":
-                    new AutoUpdateUtils(mContext).checkUpdate();
+                    if(!isApkInDebug(mContext)) {
+                        new AutoUpdateUtils(mContext).checkUpdate();
+                    }
+                    else {
+                        showToast("debug版本不予更新");
+                    }
                     break;
                 case "切换账号":
                     Intent intent=new Intent(mContext, LoginActivity.class);

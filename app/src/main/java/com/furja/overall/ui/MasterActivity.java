@@ -1,6 +1,7 @@
 package com.furja.overall.ui;
 
 import android.Manifest;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.sentry.Sentry;
 
+import static com.furja.utils.Utils.isApkInDebug;
 import static com.furja.utils.Utils.showLog;
 
 public class MasterActivity extends BaseActivity {
@@ -63,9 +65,12 @@ public class MasterActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(disposable!=null)
+        if(disposable!=null) {
             disposable.dispose();
-        new AutoUpdateUtils(this,true).checkUpdate();
+        }
+        if (!isApkInDebug(this)) {
+            new AutoUpdateUtils(this, true).checkUpdate();
+        }
     }
 
     @Override
@@ -75,5 +80,8 @@ public class MasterActivity extends BaseActivity {
                 .subscribe(event->{ //30S未操作就自行退出
                     System.exit(0);
                 },error->{
-            });    }
+            });
+    }
+
+
 }

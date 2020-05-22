@@ -21,7 +21,6 @@ import com.furja.contract.SopOnlineContract;
 import com.furja.iqc.ui.adapter.SopRecyclerAdapter;
 import com.furja.overall.FurjaApp;
 import com.furja.overall.R;
-import com.furja.utils.GlideApp;
 import com.furja.utils.RetrofitBuilder;
 import com.furja.utils.RetrofitHelper;
 import com.furja.utils.RetryWhenUtils;
@@ -140,6 +139,7 @@ public class SopOnlinePresenter implements SopOnlineContract.Presenter {
                         acquireMaterialInfo(scanString);
                     }
                 });
+        focusBarcodeInput();
     }
 
     /**
@@ -148,7 +148,7 @@ public class SopOnlinePresenter implements SopOnlineContract.Presenter {
      */
     public void acquireMaterialInfo(String scanString) {
         RetrofitHelper helper
-                = RetrofitBuilder.getHelperByUrl(getBaseUrl());
+                = RetrofitBuilder.getHelperByUrl(getHttpsUrl());
         helper.getMaterialJson(scanString)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWhenUtils())

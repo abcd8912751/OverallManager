@@ -2,6 +2,7 @@ package com.furja.iqc.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -50,6 +52,7 @@ import static com.furja.iqc.ui.LinearDialogFragment.DIALOG_SOP_ONLINE;
 import static com.furja.utils.Constants.EXTRA_NOREASON_NUMBER;
 import static com.furja.utils.Constants.EXTRA_QCLIST_DATA;
 import static com.furja.utils.Constants.getVertxUrl;
+import static com.furja.utils.Utils.doubleOf;
 import static com.furja.utils.Utils.intOf;
 import static com.furja.utils.Utils.showLog;
 import static com.furja.utils.Utils.showLongToast;
@@ -123,7 +126,8 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                     dialog.cancel();
                 });
         if(!qualified) {
-            builder.title("检验不合格,生成检验单").neutralText("让步接收").onNeutral((materialDialog, dialogAction)->{
+            builder.title("检验不合格,生成检验单").titleColor(Color.MAGENTA)
+                    .neutralText("让步接收").onNeutral((materialDialog, dialogAction)->{
                 materialDialog.getActionButton(DialogAction.POSITIVE).setVisibility(View.GONE);
                 materialDialog.getActionButton(DialogAction.NEUTRAL).setVisibility(View.GONE);
                 materialDialog.getActionButton(DialogAction.NEGATIVE).setVisibility(View.GONE);
@@ -189,24 +193,25 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
         Observable.fromCallable(new Callable<InspectBillJSON>() {
             @Override
             public InspectBillJSON call() throws Exception {
-                User user= FurjaApp.getUser();
-                InspectBillJSON inspectBillJSON=new InspectBillJSON();
-                String fuserid="0",currentOrgNumber="";
-                if(user!=null) {
+                User user = FurjaApp.getUser();
+                InspectBillJSON inspectBillJSON = new InspectBillJSON();
+                String fuserid = "0", currentOrgNumber = "";
+                if (user != null) {
                     fuserid = user.getUserName();
                     inspectBillJSON.setUser(user);
                     CloudUserWithOrg cloudUserWithOrg = FurjaApp.getCloudUser();
-                    if(cloudUserWithOrg!=null)
-                        currentOrgNumber=cloudUserWithOrg.getFOrgNumber();
+                    if (cloudUserWithOrg != null)
+                        currentOrgNumber = cloudUserWithOrg.getFOrgNumber();
                 }
                 inspectBillJSON.setFCurrentOrgNumber(currentOrgNumber);
                 List<Qrcode> qrcodes = new ArrayList<>();
-                List<ReferDetail> referDetails=new ArrayList<>();
-                NewQCList.QCDataBean topBean=qcDataBeans.get(0);
-                int materialID = topBean.getMaterialID(),inspectQty=0;
-                for(NewQCList.QCDataBean qcDataBean:qcDataBeans){
-                    int qty=intOf(qcDataBean.getApplyQcNum());
-                    Qrcode qrcode=new Qrcode(fuserid);
+                List<ReferDetail> referDetails = new ArrayList<>();
+                NewQCList.QCDataBean topBean = qcDataBeans.get(0);
+                int materialID = topBean.getMaterialID();
+                double inspectQty = 0;
+                for (NewQCList.QCDataBean qcDataBean : qcDataBeans) {
+                    double qty = doubleOf(qcDataBean.getApplyQcNum());
+                    Qrcode qrcode = new Qrcode(fuserid);
                     qrcode.setValue(qcDataBean.getBarcode());
                     qrcode.setQty(qty);
                     qrcode.setTag("生成来料检验单");
@@ -214,10 +219,10 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                     qrcode.setFSourceEntryID(qcDataBean.getApplyOrderEntryID());
                     qrcode.setFMaterialID(qcDataBean.getMaterialID());
                     qrcodes.add(qrcode);
-                    ReferDetail referDetail=new ReferDetail("PUR_ReceiveBill");
+                    ReferDetail referDetail = new ReferDetail("PUR_ReceiveBill");
                     referDetail.convertQcData(qcDataBean);
                     referDetails.add(referDetail);
-                    inspectQty+=qty;
+                    inspectQty += qty;
                 }
                 inspectBillJSON.setQrcode(qrcodes);
                 inspectBillJSON.setFMaterialNumber(topBean.getMaterialNumber());
@@ -228,9 +233,9 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                 inspectBillJSON.setFQcScheme(topBean.getQcScheme());
                 inspectBillJSON.setFSourceOrgNumber(topBean.getFSourceOrgNumber());
                 inspectBillJSON.setFSupplierNumber(topBean.getSupplyNumber());
-                List<ApplyCheckOrder> orders=new ArrayList<>(),
-                        oldOrders=detailPresenter.getmDatas();
-                for(ApplyCheckOrder order:oldOrders){
+                List<ApplyCheckOrder> orders = new ArrayList<>(),
+                        oldOrders = detailPresenter.getmDatas();
+                for (ApplyCheckOrder order : oldOrders) {
                     order.generateValue(inspectQty);
                     orders.add(order);
                 }
@@ -238,22 +243,22 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                 return inspectBillJSON;
             }
         }).subscribeOn(Schedulers.io())
-          .flatMap(new Function<InspectBillJSON, ObservableSource<BaseHttpResponse<String>>>() {
-            @Override
-            public ObservableSource<BaseHttpResponse<String>> apply(InspectBillJSON inspectBillJSON) throws Exception {
-                RetrofitHelper helper= RetrofitBuilder.getHelperByUrl(getVertxUrl());
-                return helper.postInspectBill(Utils.getRequestBody(inspectBillJSON));
-            }
-        }).retryWhen(RetryWhenUtils.create())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response->{
+                .flatMap(new Function<InspectBillJSON, ObservableSource<BaseHttpResponse<String>>>() {
+                    @Override
+                    public ObservableSource<BaseHttpResponse<String>> apply(InspectBillJSON inspectBillJSON) throws Exception {
+                        RetrofitHelper helper = RetrofitBuilder.getHelperByUrl(getVertxUrl());
+                        return helper.postInspectBill(Utils.getRequestBody(inspectBillJSON));
+                    }
+                }).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
                     materialDialog.cancel();
-                    if(response.getCode()>0) {
+                    if (response.getCode() > 0) {
                         showToast(response.getResult());
                         backToParentActivity();
-                    }else
+                    } else {
                         showLongToast(response.getResult());
-                },error->{
+                    }
+                }, error -> {
                     error.printStackTrace();
                     showToast("网络异常,请重试");
                     materialDialog.cancel();
@@ -346,10 +351,14 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
 
     @Override
     protected void pushToRight() {
-        if(webviewFragment==null)
+        if(webviewFragment==null) {
             webviewFragment = new LinearDialogFragment();
+        }
         String tag="InspectDetailWebFragment";
-        webviewFragment.show(fragmentManager,tag);
+        Fragment liveFragment = fragmentManager.findFragmentByTag(tag);
+        if(!webviewFragment.isAdded() && liveFragment==null) {
+            webviewFragment.show(fragmentManager, tag);
+        }
     }
 
     @Override
@@ -357,7 +366,10 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
         if(sopOnlineFragment==null)
             sopOnlineFragment = new LinearDialogFragment(DIALOG_SOP_ONLINE);
         String tag="InspectDetailSopOnline";
-        sopOnlineFragment.show(fragmentManager,tag);
+        Fragment liveFragment = fragmentManager.findFragmentByTag(tag);
+        if(!sopOnlineFragment.isAdded() && liveFragment==null) {
+            sopOnlineFragment.show(fragmentManager, tag);
+        }
     }
 
     @Override
@@ -370,8 +382,9 @@ public class InspectItemDetailActivity extends BaseActivity implements InspectIt
                 int position=intOf(res);
                 detailPresenter.setPositionAndValue(position);
                 detailPresenter.generateSpinnerItems(position);
-                if(!sheetFragment.isHidden())
+                if(!sheetFragment.isHidden()) {
                     sheetFragment.dismiss();
+                }
             }
         });
         sheetFragment.setTitle("检验项目清单");

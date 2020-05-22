@@ -23,6 +23,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * retrofit请求数据的接口
@@ -66,4 +67,6 @@ public interface RetrofitHelper {
     @GET("k3cloud/inspecthistory")
     Observable<BaseHttpResponse<List<InspectHistoryLog>>> getInspectHistory(@Query("username") String userName);
 
+    @GET
+    Observable<ResponseBody> request(@Url String url);
 }

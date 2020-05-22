@@ -41,7 +41,7 @@ public class RetrofitBuilder {
     }
 
     private static class  RetrofitHolder {
-        static Builder retrofitBuilder =getRetrofitBuilder();
+        static Builder retrofitBuilder = getRetrofitBuilder();
         private static Builder getRetrofitBuilder() {
             HttpsUtils.SSLParams sslParams
                     = HttpsUtils.getSslSocketFactory(null, null, null);
@@ -49,15 +49,16 @@ public class RetrofitBuilder {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
-                } };
+                }
+            };
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new LoggerInterceptor(LOG_TAG))
                     .addNetworkInterceptor(new HeaderInterceptor())
                     .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
                     .hostnameVerifier(hostnameVerifier)
-                    .connectTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(25, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
+                    .connectTimeout(15, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(40, TimeUnit.SECONDS)
                     .retryOnConnectionFailure(false)
                     //其他配置
                     .build();

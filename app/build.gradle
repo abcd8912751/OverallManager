@@ -7,7 +7,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 2
-        versionName "2.01082"
+        versionName "2.0516"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "zh-rCN"
     }
@@ -72,8 +72,7 @@ dependencies {
     implementation 'q.rorbin:badgeview:1.1.3'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0'
-//    暂不升级retrofit,升级后将不适配于4.2.2
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'//    暂不升级retrofit,升级后将不适配于4.2.2
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
     implementation 'com.github.BaronZ88:Retrofit2-FastJson-Converter:1.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.15'

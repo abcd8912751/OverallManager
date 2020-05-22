@@ -31,6 +31,7 @@ import static com.furja.utils.Constants.VERTX_TEST_URL;
 import static com.furja.utils.Constants.getVertxUrl;
 import static com.furja.utils.MyCrashHandler.postError;
 import static com.furja.utils.TextInputListener.INPUT_ERROR;
+import static com.furja.utils.Utils.doubleOf;
 import static com.furja.utils.Utils.intOf;
 import static com.furja.utils.Utils.showLog;
 import static com.furja.utils.Utils.showLongToast;
@@ -131,11 +132,13 @@ public class IncomingVerifyPresenter {
                 },error->{
                     removeErrorBarcode(barCode);
                     error.printStackTrace();
-                    postError(error);
-                    if(error instanceof JSONException)
+                    if(error instanceof JSONException) {
                         showToast(SERVER_ABNORMAL);
-                    else
+                        postError(error);
+                    }
+                    else {
                         showToast(INTERNET_ABNORMAL);
+                    }
                     verifyView.setEmptyView(R.layout.offline_empty_view);
                     verifyView.showBarCodeEditor();
                 });
@@ -169,7 +172,7 @@ public class IncomingVerifyPresenter {
         QcDataBeans =qcList.getQCData();
         NewQCList.QCDataBean dataBean=QcDataBeans.get(0);
         setMaterialInfo(dataBean.toString());
-        verifyView.showMaterialInfo(getMaterialInfo()+getBarCodeStr());
+        verifyView.showMaterialInfo(getMaterialInfo()+getBarCodeStr()+dataBean.getFUnitNumber());
     }
 
     /**
@@ -179,11 +182,11 @@ public class IncomingVerifyPresenter {
     public String getBarCodeStr() {
         if(QcDataBeans.isEmpty())
             return "";
-        String barString =System.getProperty("line.separator")+"    请检数量:      ";
-        int actReceQty=0;
+        String barString =System.getProperty("line.separator")+"   请检数量:      ";
+        double actReceQty=0;
         for (NewQCList.QCDataBean dataBean:QcDataBeans)
-            actReceQty += intOf(dataBean.getApplyQcNum());
-        return barString+actReceQty;
+            actReceQty += doubleOf(dataBean.getApplyQcNum());
+        return barString + actReceQty ;
     }
 
     /**

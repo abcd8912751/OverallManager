@@ -7,16 +7,18 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-
 import com.furja.utils.Constants;
+import com.furja.utils.RetrofitBuilder;
+import com.furja.utils.RetrofitHelper;
+import com.furja.utils.RetryWhenUtils;
 import com.furja.utils.SharpBus;
-
 import java.util.concurrent.Callable;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-
 import static com.furja.utils.Constants.TAG_GOT_NETWORK;
+import static com.furja.utils.Constants.VERTX_INNER_URL;
+import static com.furja.utils.Constants.VERTX_OUTER_URL;
 import static com.furja.utils.Utils.showLog;
 
 /**
@@ -26,31 +28,71 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     private static Context context;
     private static NetworkChangeReceiver networkChangeReceiver;
     private static boolean oldFlag = true;  //尚未获取到准确网络环境时为false
-    private static boolean isInnerNet=true;
+    private static boolean isInnerNet = true;
     private NetWorkListener netWorkListener;    //网络切换时调用其方法通知
-    public static void init(Context applicationContext)
-    {
-        context=applicationContext;
-        IntentFilter intentFilter=new IntentFilter();
+    public static void init(Context applicationContext) {
+        context = applicationContext;
+        IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         getInstance();
-        context.registerReceiver(networkChangeReceiver,intentFilter);
+        context.registerReceiver(networkChangeReceiver, intentFilter);
     }
-    public static NetworkChangeReceiver getInstance()
-    {
-        if(networkChangeReceiver==null)
-            networkChangeReceiver=new NetworkChangeReceiver();
+
+    public static NetworkChangeReceiver getInstance() {
+        synchronized (NetworkChangeReceiver.class) {
+            if (networkChangeReceiver == null) {
+                networkChangeReceiver = new NetworkChangeReceiver();
+            }
+        }
         return networkChangeReceiver;
     }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         ConnectivityManager connectivityManager= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
-        if(networkInfo==null||!networkInfo.isAvailable())
+        if(networkInfo==null||!networkInfo.isAvailable()) {
             showLog("网络不可用");
-        else
-            pingAndSetCurNet();
+        }
+        else {
+            checkNetworkDomain();
+        }
     }
+
+
+    /**
+     * 检测终端是在内网还是外网
+     */
+    public void checkNetworkDomain(){
+        RetrofitHelper helper = RetrofitBuilder.getHelperByUrl(VERTX_OUTER_URL);
+        helper.request(VERTX_OUTER_URL)
+                .subscribeOn(Schedulers.io())
+                .subscribe(responseBody -> {
+                    NetworkChangeReceiver.isInnerNet = false;
+                    checkInnerNetwork();
+                    showLog("网络状态变化为外网");
+                }, error->{
+                    NetworkChangeReceiver.isInnerNet = true;
+                    showLog("网络状态变化为内网");
+                });
+    }
+
+    /**
+     * 检测内外
+     */
+    public  void checkInnerNetwork() {
+        RetrofitHelper helper = RetrofitBuilder.getHelperByUrl(VERTX_INNER_URL);
+        helper.request(VERTX_INNER_URL)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(RetryWhenUtils.create())
+                .subscribe(responseBody -> {
+                    NetworkChangeReceiver.isInnerNet = true;
+                    showLog("网络状态变化为内网");
+                }, error->{
+                    showLog("网络状态变化为外网");
+                });
+    }
+
 
     /**
      * ping 指定IP返回成功与否
@@ -86,8 +128,9 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
 
     public static void unregister() {
-        if(context!=null&&networkChangeReceiver!=null)
+        if(context!=null&&networkChangeReceiver!=null) {
             context.unregisterReceiver(networkChangeReceiver);
+        }
     }
 
     public static boolean isInnerNet() {
@@ -102,22 +145,20 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     /**
      * ping 一下公司内网服务器,判断是否在内网
      */
-    public  void pingAndSetCurNet()
-    {
+    public  void pingAndSetCurNet() {
         Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
                 return ping("192.168.10.5");   //ping百度的IP
-            }})
-                .subscribeOn(Schedulers.newThread())
+            }}).subscribeOn(Schedulers.newThread())
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean isInnerNet) throws Exception {
                         if(oldFlag){
-                            SharpBus.getInstance().post(TAG_GOT_NETWORK,TAG_GOT_NETWORK);
+                            SharpBus.getInstance().post(TAG_GOT_NETWORK, TAG_GOT_NETWORK);
                         }
-                        oldFlag=false;
-                        Log.e("NetworkChange","网络状态变化为内网:"+isInnerNet);
+                        oldFlag = false;
+                        Log.e("NetworkChange", "网络状态变化为内网:"+isInnerNet);
                         setIsInnerNet(isInnerNet);
                         Constants.isInnerNet=isInnerNet;
                         toRemedy();
@@ -129,15 +170,13 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
      * 当网络恢复正常时进行一些补救操作->比如上传因网络异常未被上传的数据
      */
     private  void toRemedy() {
-
         if(netWorkListener!=null)
             netWorkListener.onChange(isInnerNet);
     }
     public static boolean isOldFlag() {
         return oldFlag;
     }
-    public interface NetWorkListener
-    {
+    public interface NetWorkListener {
         void onChange(boolean isInnerNet);
     }
 }

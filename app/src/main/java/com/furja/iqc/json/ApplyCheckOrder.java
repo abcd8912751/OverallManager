@@ -95,25 +95,29 @@ public class ApplyCheckOrder {
     /**
      * 生成合乎规则的检测值
      */
-    public void generateValue(int inspectQty) {
+    public void generateValue(double inspectQty) {
         InspectValueItem inspectValueItem=new InspectValueItem();
         this.FAcceptQty1 = intOf(dataBean.getAcceptQty());
         this.FRejectQty1 = intOf(dataBean.getRejectQty());
-        int valueSize=0;    FValueGrid.clear();
+        int valueSize=0;
+        FValueGrid.clear();
         if(dataBean.getAnalysisWay().contains("定性")){
             int unqualifiedQty1 = intOf(fNOnumber1);
             int unqualifiedQty2 = intOf(fNOnumber2);
             int unqualifiedQty3 = intOf(fNOnumber3);
             valueSize=unqualifiedQty1+unqualifiedQty2+unqualifiedQty3;
-            if(textOf(fNOReason1).length()>0)
-                for(int i=0;i<unqualifiedQty1;i++)
+            if (textOf(fNOReason1).length() > 0) {
+                for (int i = 0; i < unqualifiedQty1; i++)
                     FValueGrid.add(new InspectValueItem(fNOReason1));
-            if(textOf(fNOReason2).length()>0)
-                for(int i=0;i<unqualifiedQty2;i++)
+            }
+            if (textOf(fNOReason2).length() > 0) {
+                for (int i = 0; i < unqualifiedQty2; i++)
                     FValueGrid.add(new InspectValueItem(fNOReason2));
-            if(textOf(fNOReason3).length()>0)
-                for(int i=0;i<unqualifiedQty3;i++)
+            }
+            if (textOf(fNOReason3).length() > 0) {
+                for (int i = 0; i < unqualifiedQty3; i++)
                     FValueGrid.add(new InspectValueItem(fNOReason3));
+            }
         } else {
             addValueItemByValueQ(fcheckvalue1);
             addValueItemByValueQ(fcheckvalue2);
@@ -126,13 +130,11 @@ public class ApplyCheckOrder {
             valueSize=6;
         }
         this.FSampleQty1 = intOf(dataBean.getSampleQty());
-        this.FSampleQty1 = Math.max(valueSize,FSampleQty1);
-        this.FSampleQty1 = Math.min(inspectQty,FSampleQty1);
         this.FTargetValQ = doubleOf(dataBean.getTargetValue());
         this.FUpLimitQ = doubleOf(dataBean.getUpperSpec());
         this.FDownLimitQ=doubleOf(dataBean.getLowerSpec());
-        this.FUpOffsetQ=dataBean.getFUpOffsetQ();
-        this.FDownOffsetQ=dataBean.getFDownOffsetQ();
+        this.FUpOffsetQ = dataBean.getFUpOffsetQ();
+        this.FDownOffsetQ = dataBean.getFDownOffsetQ();
     }
 
     public boolean isHasSixValue() {

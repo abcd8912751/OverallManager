@@ -19,8 +19,7 @@ public class MaterialInfo {
     private String materialISN;//物料内码
     private List<String> urls;
     private String produceNo;
-    public MaterialInfo()
-    {
+    public MaterialInfo() {
 
     }
 

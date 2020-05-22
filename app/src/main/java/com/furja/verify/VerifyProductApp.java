@@ -3,6 +3,7 @@ package com.furja.verify;
 import android.content.Context;
 
 import com.furja.common.User;
+import com.furja.overall.FurjaApp;
 import com.furja.utils.Utils;
 import com.furja.common.Preferences;
 
@@ -23,7 +24,7 @@ public class VerifyProductApp  {
 
 
     public static Context getContext() {
-        return Utils.getContext();
+        return FurjaApp.getContext();
     }
 
 

@@ -18,8 +18,8 @@ public class LineItemAdapter extends BaseQuickAdapter<NewQCList.QCDataBean,BaseV
     @Override
     protected void convert(BaseViewHolder helper, NewQCList.QCDataBean item) {
         helper.setText(R.id.text_barcode,"条形码: "+item.getBarcode());
-        helper.setText(R.id.text_billNo,"请检单号:"+item.getApplyOrderBillNo());
-        helper.setText(R.id.text_qty,"请检数量:"+item.getApplyQcNum());
+        helper.setText(R.id.text_billNo,"请检单:"+item.getApplyOrderBillNo());
+        helper.setText(R.id.text_qty,"数量:"+item.getApplyQcNum());
     }
 
     public boolean isEmpty() {

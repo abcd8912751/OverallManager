@@ -49,7 +49,7 @@ import static com.furja.utils.Constants.getCloudUrl;
 import static com.furja.utils.Utils.showLog;
 
 /**
- * 电源线检验的活动
+ * 来料检验的活动
  */
 public class InspectIncomingActivity extends BaseActivity implements IncomingVerifyPresenter.LineVerifyView{
     @BindView(R.id.input_mainBarCode)
@@ -110,7 +110,7 @@ public class InspectIncomingActivity extends BaseActivity implements IncomingVer
     private void initWebView() {
         emptyWebView =View.inflate(this,R.layout.layout_websurf,null);
         LinearLayout linearLayout= emptyWebView.findViewById(R.id.linear_layout);
-        String url=getCloudUrl()+"/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
+        String url = getCloudUrl()+"/FJ_QCAutoDispatch/views/FJ_QCAutoDispatch/FJ_QCAutoDispatchForInNetWorkForFChecker.html?FCheckerName=";
         String userName = FurjaApp.getUserName();
         url = url +userName;
         agentWeb = AgentWeb.with(this)

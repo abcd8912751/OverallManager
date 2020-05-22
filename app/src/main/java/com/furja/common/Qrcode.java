@@ -4,7 +4,7 @@ import static com.furja.utils.Utils.intOf;
 
 public class Qrcode {
     private String value;
-    private int qty;
+    private double qty;
     private String tag;
     private String FBillNo;
     private int FMaterialID;
@@ -65,11 +65,11 @@ public class Qrcode {
         this.FUserID = FUserID;
     }
 
-    public int getQty() {
+    public double getQty() {
         return qty;
     }
 
-    public void setQty(int qty) {
+    public void setQty(double qty) {
         this.qty = qty;
     }
 

@@ -110,7 +110,6 @@ public class InspectItemDetailPresenter {
                 try {
                     int item= adapter.getItem(position);
                     setPositionAndValue(item-1);
-                    showLog("选中:"+item);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -337,8 +336,7 @@ public class InspectItemDetailPresenter {
             return;
         final NewQCList.QCEntryDataBean dataBean =item.getDataBean();
         String projectName=dataBean.getQcProject();
-        double upperSpec
-                =doubleOf(dataBean.getUpperSpec()),
+        double upperSpec =doubleOf(dataBean.getUpperSpec()),
                 lowerSpec=doubleOf(dataBean.getLowerSpec()),
                 targetValue=doubleOf(dataBean.getTargetValue());
         alterDecimalFormat(projectName);
@@ -347,6 +345,11 @@ public class InspectItemDetailPresenter {
         if(projectName.contains("绞距")&&hasSixValue) {
             if(projectName.contains("铜丝"))
                 item.setFcheckvalue1("19");
+            item.setFcheckvalue2("0");
+            item.setFcheckvalue3("0");
+            item.setFcheckvalue4("0");
+            item.setFcheckvalue5("0");
+            item.setFcheckvalue6("0");
             mDatas.set(currentPosition,item);
             valueEditWithItem(item);
             return;
@@ -361,6 +364,9 @@ public class InspectItemDetailPresenter {
         checkValue=getRandomDouble(lowerSpec,targetValue,upperSpec,projectName);
         item.setFcheckvalue3(checkValue);
         if(projectName.contains("硬度")&&hasSixValue) {
+            item.setFcheckvalue4("0");
+            item.setFcheckvalue5("0");
+            item.setFcheckvalue6("0");
             mDatas.set(currentPosition,item);
             valueEditWithItem(item);
             return;
@@ -378,11 +384,12 @@ public class InspectItemDetailPresenter {
 
     public  String getRandomDouble(double start,double target,double end,String projectName) {
         if(projectName.contains("插片厚度")) {
-            target=1.46;end=1.48;
+            if(isFit(start,end,1.48))
+                end=1.48;
         }
         else if(projectName.contains("中心距")) {
-            if(end>=12.71) {
-                target = 12.68;
+            if(isFit(start,end,12.71)) {
+                target = Math.max(start,12.68);
                 end = 12.71;
             }
         }
@@ -394,22 +401,26 @@ public class InspectItemDetailPresenter {
             if(!projectName.contains("线径"))
                 start=target;
             else {
-                start=0.154;
-                end=0.156;
+                if(isFit(start,end,0.154))
+                    start=0.154;
+                if(isFit(start,end,0.156))
+                    end=0.156;
             }
             n=1/(end-start);
         }
-        gap=  produceGapByProject(gap,projectName);
-        double result
-                =start+gap+random.nextDouble()/n;
+        gap = produceGapByProject(gap,projectName);
+        double result =start+gap+random.nextDouble()/n;
         if(result>=end)
-                result=end;
-        if(projectName.contains("铜丝股数")
-                ||projectName.contains("自熄管：长度"))
+            result=end;
+        if(projectName.contains("铜丝股数")||projectName.contains("自熄管：长度"))
             result=target;
         return df.format(result);
     }
 
+
+    private boolean isFit(double start,double end,double value){
+        return value>=start&&value<=end;
+    }
     /**
      * @param projectName
      * @return

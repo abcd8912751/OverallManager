@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -12,7 +13,10 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -78,9 +82,114 @@ import static com.furja.verify.utils.InneURL.FURJA_BADTYPEBASIC_URL;
 public class Utils {
     public static Random random=new Random();
     public static NotificationManager notificationManager;
-    private static  Context context;
     private static DaoMaster daoMaster;
-    private static DaoMaster.DevOpenHelper helper;
+    public static Handler toastHandler;
+    private static HandlerThread handlerThread;
+    public static final int TAG_TOAST_MESSAGE = 1232;
+
+    /**
+     * 显示长Toast
+     * @param msg
+     */
+    public static void showLongToast(final String msg) {
+        showLog(msg);
+        if (!TextUtils.isEmpty(msg)) {
+            if (isPrimaryThread()) {
+                showLongToastView(msg);
+            }
+            else if (toastHandler != null) {
+                Message message = toastHandler.obtainMessage();
+                message.what = TAG_TOAST_MESSAGE;
+                message.obj = msg;
+                toastHandler.sendMessage(message);
+            }
+        }
+    }
+
+    /**
+     * 显示Toast
+     * @param msg
+     */
+    public static void showToast(final String msg) {
+        showLog(msg);
+        if (!TextUtils.isEmpty(msg)) {
+            if (isPrimaryThread()) {
+                showToastView(msg);
+            }
+            else if (toastHandler != null) {
+                Message message = toastHandler.obtainMessage();
+                message.what = TAG_TOAST_MESSAGE;
+                message.obj = msg;
+                toastHandler.sendMessage(message);
+            }
+        }
+    }
+
+    /**判断当前应用是否是debug状态
+     * @return
+     */
+    public static boolean isApkInDebug(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * 初始化ToastHandler
+     */
+    public static void initToastHandler() {
+        handlerThread = new HandlerThread("ToastHandler");
+        handlerThread.start();
+        Looper looper = handlerThread.getLooper();
+        toastHandler = new Handler(looper, new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if(msg.what == TAG_TOAST_MESSAGE) {
+                    String message = textOf(msg.obj);
+                    showToastView(message);
+                }
+                return true;
+            }
+        });
+    }
+
+    /**
+     * 判断是否为主线程
+     * @return
+     */
+    public static boolean isPrimaryThread(){
+        return Looper.getMainLooper() == Looper.myLooper();
+    }
+
+    private static void showToastView(String msg) {
+        try {
+            Context context = FurjaApp.getContext();
+            if (Build.VERSION.SDK_INT > 24) {
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            } else {
+                AnimToast.makeText(context, msg).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void showLongToastView(String msg) {
+        try {
+            Context context = FurjaApp.getContext();
+            if (Build.VERSION.SDK_INT > 24) {
+                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+            } else {
+                AnimToast.makeText(context, msg).setDelay(2).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 打印Log
      * @param msg
@@ -109,51 +218,6 @@ public class Utils {
      */
     public static float px2dp(float pxValue) {
         return (pxValue / Resources.getSystem().getDisplayMetrics().density);
-    }
-    /**
-     * 显示Toast
-     * @param msg
-     */
-    public static void showLongToast(final String msg) {
-        showLog(msg);
-        new Thread(){
-            public void run(){
-                try {
-                    Looper.prepare();
-                    Context context= FurjaApp.getContext();
-                    if (Build.VERSION.SDK_INT>24)
-                        Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
-                    else
-                        AnimToast.makeText(context,msg).setDelay(2).show();
-                    Looper.loop();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-    }
-
-    /**
-     * 显示Toast
-     * @param msg
-     */
-    public static void showToast(final String msg) {
-        showLog(msg);
-        new Thread(){
-            public void run(){
-                try {
-                    Looper.prepare();
-                    Context context= FurjaApp.getContext();
-                    if (Build.VERSION.SDK_INT>24)
-                        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
-                    else
-                        AnimToast.makeText(context,msg).show();
-                    Looper.loop();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
     }
 
     public static String getIntentAction(Intent intent){
@@ -253,6 +317,7 @@ public class Utils {
     @SuppressLint("MissingPermission")
     public static String getDeviceID(){
         String deviceID=Preferences.getDeviceID();
+        Context context = FurjaApp.getContext();
         if(!TextUtils.isEmpty(deviceID))
             return deviceID;
         try {
@@ -260,8 +325,9 @@ public class Utils {
             deviceID=telephonyMgr.getDeviceId();
          } catch (Exception e) {
         }
-        if(!TextUtils.isEmpty(deviceID))
-            deviceID= "imei -> "+deviceID;
+        if(!TextUtils.isEmpty(deviceID)) {
+            deviceID = "imei -> " + deviceID;
+        }
         else {
             try {
                 deviceID=Settings.Secure.getString(context.getContentResolver(), "android_id");
@@ -283,6 +349,7 @@ public class Utils {
     }
 
     public static String getIPAddress() {
+        Context context = FurjaApp.getContext();
         ConnectivityManager connectivityManager= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
         String ipAddress="";
@@ -300,7 +367,7 @@ public class Utils {
                   } catch (Exception e) {
                 }
             } else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {    // 当前使用无线网络
-                WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                 ipAddress = intIP2StringIP(wifiInfo.getIpAddress());    // 得到IPV4地址
             }
@@ -424,32 +491,21 @@ public class Utils {
         }
     }
 
-    public static void setContext(Context context) {
-        Utils.context = context;
-        notificationManager
-                = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-    }
 
     public static DaoMaster getDaoMaster() {
-        if(daoMaster==null)
+        if(daoMaster==null) {
             initDaoMaster();
+        }
         return daoMaster;
     }
 
 
-    public static Context getContext() {
-        return context;
-    }
 
-    public static   void initDaoMaster() {
-        helper = new DaoMaster.DevOpenHelper(context, "OverallManager.db", null);
+    public static  void initDaoMaster() {
+        Context context = FurjaApp.getContext();
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "OverallManager.db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);//获取唯一DaoMaster对象
-    }
-
-    public static void closeDb() {
-        if(helper!=null)
-            helper.close();
     }
 
 
@@ -474,8 +530,11 @@ public class Utils {
      *推送通知,ID标识区分如下:
      * 点检计划是计划ID*10+1;保养计划是计划ID*10+2;维修相关是其工单ID*10+3
      */
-    public static void showNotification(int id, String text, String title, String info, Intent intent)
-    {
+    public static void showNotification(int id, String text, String title, String info, Intent intent) {
+        Context context = FurjaApp.getContext();
+        if(notificationManager == null){
+            notificationManager = (NotificationManager) context.getSystemService( Context.NOTIFICATION_SERVICE);
+        }
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context,"planOver")
                         .setSmallIcon(R.mipmap.ic_launcher)

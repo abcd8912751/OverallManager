@@ -111,7 +111,7 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
         private void convertWith(BaseViewHolder helper, InspectHistoryLog historyLog){
             String lineSeparator = System.getProperty("line.separator");
             String receiveStr = "收料员:"+historyLog.getFReceiveBiller()
-                    +lineSeparator+"收料:"+historyLog.getFReceiveBillno();
+                    +lineSeparator+"单据:"+historyLog.getFReceiveBillno();
             receiveStr=receiveStr+lineSeparator;
             receiveStr=receiveStr+"数量:"+historyLog.getFReceiveQty();
             helper.setText(R.id.text_receive,receiveStr);
@@ -134,7 +134,7 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
                     else {
                         textStock.setTextColor(Color.BLACK);
                         String mrbStr="退料员:"+historyLog.getFMrbBiller()+lineSeparator;
-                        mrbStr=mrbStr+"退料:"+historyLog.getFMrbBillNo()+lineSeparator;
+                        mrbStr=mrbStr+"单据:"+historyLog.getFMrbBillNo()+lineSeparator;
                         mrbStr=mrbStr+historyLog.getFMrbDate();
                         textStock.setText(mrbStr);
                         textInspect.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.ic_right_arrow,0);
@@ -152,7 +152,7 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
                     else {
                         textStock.setTextColor(Color.BLACK);
                         String stockStr="入库员:"+historyLog.getFInstockBiller()+lineSeparator;
-                        stockStr=stockStr+"入库:"+historyLog.getFInstockBillNo()+lineSeparator;
+                        stockStr=stockStr+"单据:"+historyLog.getFInstockBillNo()+lineSeparator;
                         stockStr=stockStr+historyLog.getFInstockDate();
                         textStock.setText(stockStr);
                         textInspect.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.ic_right_arrow,0);
@@ -208,6 +208,5 @@ public class RecyclerBottomSheetFragment<T> extends BottomSheetDialogFragment {
     public void setClickCallBack(JustCallBack clickCallBack) {
         this.clickCallBack = clickCallBack;
     }
-
 
 }

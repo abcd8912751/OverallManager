@@ -12,7 +12,7 @@ public class Constants {
     public static final String FURJA_BCWEBINNER_URL ="http://192.168.10.5:5050/bcwebservice/Service.asmx/";
     public static final String FURJA_QCWEBINNER_URL ="http://192.168.10.5:5050/qCWEBSERVICE/Service.asmx/";
     public static final String FURJA_QCWEBOUTER_URL ="http://61.164.75.234:5050/qCWEBSERVICE/Service.asmx/";
-    public static final String VERTX_TEST_URL="http://192.168.10.92:8378";
+    public static final String VERTX_TEST_URL="http://192.168.10.115:8378";
     public static final String VERTX_INNER_URL="http://192.168.8.46:8378";
     public static final String VERTX_OUTER_URL="http://www.nbfurja.com:8378";
     public static final String FURJA_INNER_URL="http://192.168.8.46:8118/";
@@ -120,12 +120,6 @@ public class Constants {
             return FURJA_RELEASE_URL;
     }
 
-    public static String getFurjaBarCodeINFO() {
-        if(isInnerNet)
-            return InneURL.FURIA_RELEASE_URL;
-        else
-            return FURJA_RELEASE_URL;
-    }
     @NonNull
     public static String getBaseUrl() {
         String url="";
@@ -138,11 +132,13 @@ public class Constants {
 
     @NonNull
     public static String getCloudUrl() {
-        String url="";
-        if(NetworkChangeReceiver.isInnerNet())
-            url= FURJA_CLOUDINNER_URL;
-        else
-            url= FURJA_CLOUDOUTER_URL;
+        String url = FURJA_CLOUDINNER_URL;
+        if(NetworkChangeReceiver.isInnerNet()) {
+            url = FURJA_CLOUDINNER_URL;
+        }
+        else {
+            url = FURJA_CLOUDOUTER_URL;
+        }
         return url;
     }
 
